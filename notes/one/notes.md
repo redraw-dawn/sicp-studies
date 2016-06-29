@@ -1,7 +1,6 @@
+# 1 - Building Abstractions with Procedures
 
-# 1
-
-## 1.1
+## 1.1 - Elements of Programming
 
 Every language has 3 features:
 - Primtive Expressions => the simplest entities the language is concerned with
@@ -12,19 +11,24 @@ In programming we deal with 2 elements:
 - data => stuff to manipulate
 - procedures => ways to manipulate it
 
-### 1.1.1
+an expression can be:
+- 7 => a primitive expression
+- (+ 2 2) => a compound expression
+- potentially includes more than this
+
+### 1.1.1 - Expressions
 
 * Lisp expressions are contained within parentheses.
 * Lisp follows prefix notation e.g. (+ 2 3) => operator first followed by operands
 
-### 1.1.2
+### 1.1.2 - Naming and the Environment
 
 * to name a computational object use the special form "define" e.g. (define x 2) => x equals 2
 * can use define to name compound expressions e.g. (define compound (* x (+ 10 2)))
 * associating symbols and later retrieving them requires them to be stored in memory
 * memory is aka environment. There can be a global environment; many programs will include multiple environments
 
-### 1.1.3
+### 1.1.3 - Evaluating Combinations
 
 * To evaluate a combination the following must happen:
 - evaluate subexpressions of the combination
@@ -33,7 +37,7 @@ In programming we deal with 2 elements:
 
 * Special forms are the only exception to the evaluation rule for the rest of Lisp.
 
-### 1.1.4
+### 1.1.4 - Compound Procedures
 
 * Numbers and arithmetic operations are primitive data and procedures
 * Nesting of combinations provides a means of combining operations
@@ -45,7 +49,7 @@ In programming we deal with 2 elements:
 (define (square x) (* x x))
 (define (sumOfSquares a b) (+ (square a) (square b)))
 
-### 1.1.5
+### 1.1.5 - The Substitution Model for Procedure Application
 
 * compound procedures are evaluated in the same process as primitive procedures i.e. evaluates
   elements of combination then applies procedure (operand) to arguments (values of operators).
@@ -80,5 +84,60 @@ In programming we deal with 2 elements:
 * Lisp uses applicative-order evaluation for additional efficiency and for reduced complication in situations
   where the substitution model cannot be used.
 
+### 1.1.6 - Conditional Expressions and Predicates
 
+      / r if r > 0
+|r| = | 0 if r = 0
+      \ -r if r < 0
 
+* this is called a case analysis and the special form in Lisp for this is "cond"
+
+(define (abs x)
+	(cond ((> x 0) x)
+	((= x 0) 0)
+	((< x 0) (-x))))
+
+general form is:
+(cond (<p1> <e1>)
+      (<p2> <e2>)
+      (<pn> <en>))
+
+^ where p is a predicate and e is an expression
+* a predicate is an expression which evaluates to true or false
+* the predicates are evaluated in order and when one is found to be true the corresponding expression is evaluated
+
+another way to write abs is:
+(define (abs x)
+	(cond (< x 0) (-x)
+	(else x)))
+
+* "else" is a special form that can be used in final place of a cond statement and always evaluates as true if all
+  predicates fail
+
+another way to write abs:
+(define (abs x)
+	(if (< x 0)
+	(-x)
+	x))
+
+general form is:
+(if <predicate> <consequent> <alternative>)
+
+* if is a special form which is a restricted cond where there are two cases in the case analysis
+
+* there are some logical composition operations which allow us to construct compound predicates, these are:
+- (and <e1> ... <eN>) => all expressions are evaluated one by one and if all true it returns last expression
+- (or <e1> ... <eN>) => evaluates one by one until one is true then returns that, unless all false then returns false
+- (not <e1>) => evaluates to true when e1 is false and false otherwise
+
+* note "and" and "or" are special expressions because not all subexpressions are always evaluated, "not" is normal.
+
+examples:
+- test x is greater than or equal to y:
+  (define (>= x y)
+  	  (or (> x y) (= x y)))
+OR
+  (define (>= x y)
+  (not (< x y)))
+
+### 1.1.7 Example: Square Roots by Newton's Method
