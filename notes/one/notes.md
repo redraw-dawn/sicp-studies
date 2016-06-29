@@ -40,12 +40,45 @@ In programming we deal with 2 elements:
 
 * To define a procedure we can use special form "define" again:
 - general form is: (define (<name> <formal parameters>) (<body>))
-- (define (square x) (* x x)) => compound procedure named square that takes one argument
-- this can be used in a combination e.g. (+ (square 2) 8) OR
-- (define (sumOfSquares a b) (+ (square a) (square b)))
+- this can be used in a combination e.g. (+ (square 2) 8)
 
+(define (square x) (* x x))
+(define (sumOfSquares a b) (+ (square a) (square b)))
 
+### 1.1.5
 
+* compound procedures are evaluated in the same process as primitive procedures i.e. evaluates
+  elements of combination then applies procedure (operand) to arguments (values of operators).
+* Substitution model: evaluate the inner subexpressions by applying the operators one level at a time
+
+#### Applicative Order VS Normal Order
+
+(define (fn a) (sumOfSquares (+ a 1) (* a 2)))
+
+* Normal Order:
+- Substitute in operand expressions for parameters until an expression containing only primitive expressions is left
+  and then evaluate
+
+(f 5)
+(sumOfSquares (+ 5 1) (* 5 2))
+(+ (square (+ 5 1)) (square (* 5 2)) )
+(+ (* (+ 5 1) (+ 5 1)) (* (* 5 2) (* 5 2)) )
+(+ (* 6 6) (* 10 10) )
+(+ 36 100)
+136
+
+* Applicative Order:
+- evaluate the arguments at each step of the substitution then apply operator
+
+(f 5)
+(sumOfSquares (+ 5 1) (* 5 2) )
+(+ (square 6) (square 10) )
+(+ (* 6 6) (* 10 10) )
+(+ 36 100 )
+136
+
+* Lisp uses applicative-order evaluation for additional efficiency and for reduced complication in situations
+  where the substitution model cannot be used.
 
 
 
