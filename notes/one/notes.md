@@ -151,5 +151,59 @@ root x = the y such that y >= 0 and y^2 = x
 * The difference between function and a procedure is knowing the properties of something vs how to do it a.k.a
   declarative knowledge vs imperative knowledge
 
+### 1.1.8 Procedures as Black-Box Abstractions
 
+* A recursive procedure is one which calls itself
+* It's important for procedures to accomplish an identifiable task
+* When a procedure is used within another procedure it can be considered a procedural abstraction
+* Parameters to procedures are local to procedures
 
+i.e. (define (square x) (* x x)) & (define (addTwo x) (+ 2 x))
+^ (square (addTwo 3)) => the "x" parameter of addTwo will not affect square's x
+
+* Names of formal parameters are special in that they are arbitrary. The names are referred to as bound variables
+* A procedure "binds" its formal parameters
+* The meaning of a procedure is unchanged even if a bound variable is renamed throughout the definition
+* Unbound variables are referred to as "free"
+
+* The set of expressions for which binding defines a name is referred to as the "scope" of that name
+
+(define (good-enough? guess x)
+  (< (abs (- (square guess) x)) 0.001))
+
+* In good-enough? "guess" & "x" are bound variables and "<", "abs", "-" & "square" are free.
+* Parameter names can override free variables and cause bugs.
+* good-enough? is not independent of the free variables, it relies on them being defined elsewhere within scope
+
+* In order to restrict scope of procedures it is possible to define them as subprocedures within a procedure to keep them scoped to the outer procedure only.
+(define (sqrt x)
+	(define (good-enough? guess x)
+		(< (abs (- (square guess) x)) 0.001))
+	(define (improve guess x)
+		(average guess (/ x guess)))
+	(define (sqrt-iter guess x)
+		(if (good-enough? guess x)
+		guess
+		(sqrt-iter (improve guess x) x)))
+	(sqrt-iter 1.0 x))
+
+* This helps to minimise a cluttered namespace allows procedures to only be available where needed.
+
+* Nesting procedures within other procedures is referred to as block structure
+
+* Above, x is used in good-enough?, improve & sqrt-iter. Since it's bound by sqrt and all these are
+  in the scope of that we can remove x from them as follows:
+
+(define (sqrt x)
+	(define (good-enough? guess)
+		(< (abs (- (square guess) x)) 0.001))
+	(define (improve guess)
+		(average guess (/ x guess)))
+	(define (sqrt-iter guess)
+		(if (good-enough? guess)
+		guess
+		(sqrt-iter (improve guess))))
+	(sqrt-iter 1.0)
+	)
+
+* block structure originated in the language Algol 60
