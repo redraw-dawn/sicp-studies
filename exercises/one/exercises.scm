@@ -57,6 +57,33 @@
 (square 1.010000006156156)
 ;; => 1.0201000124354351
 
+(define (good-enough-new guess prev-guess)
+  (< (abs (- guess prev-guess) ) 0.001))
+
+(define (sqrt-iter-new guess prev-guess x)
+  (if (good-enough-new guess prev-guess)
+      guess
+      (sqrt-iter-new (improve guess x) guess x)
+      ))
+
+(define (sqrt-new x)
+  (sqrt-iter-new 1.0 0 x))
 ;; the test won't be adequate for large numbers because it is too minute a difference and will not return a value
 ;; e.g.
 (sqrt 99991912481924812)
+
+;; Exercise 1.8
+(define (cube-iter guess x)
+  (if (good-enough? guess x)
+      guess
+      (cube-iter (cube-improve guess x) x)
+      ))
+
+(define (cube-improve guess x)
+  (/ (+ (/ x
+	   (square guess))
+	(* 2 guess))
+   3))
+
+(define (cbrt x)
+  (cube-iter 1.0 x))
