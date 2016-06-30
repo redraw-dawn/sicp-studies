@@ -155,7 +155,8 @@ root x = the y such that y >= 0 and y^2 = x
 
 * A recursive procedure is one which calls itself
 * It's important for procedures to accomplish an identifiable task
-* When a procedure is used within another procedure it can be considered a procedural abstraction
+* Procedural abstraction is the principle that any operation which achieves a well-defined effect can be considered a single-entity,
+  despite the fact it may be made up of other opeations.
 * Parameters to procedures are local to procedures
 
 i.e. (define (square x) (* x x)) & (define (addTwo x) (+ 2 x))
