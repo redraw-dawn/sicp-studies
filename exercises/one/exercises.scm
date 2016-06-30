@@ -73,10 +73,10 @@
 (sqrt 99991912481924812)
 
 ;; Exercise 1.8
-(define (cube-iter guess x)
-  (if (good-enough? guess x)
+(define (cube-iter guess prev-guess x)
+  (if (good-enough-new guess prev-guess)
       guess
-      (cube-iter (cube-improve guess x) x)
+      (cube-iter (cube-improve guess x) guess x)
       ))
 
 (define (cube-improve guess x)
@@ -86,4 +86,4 @@
    3))
 
 (define (cbrt x)
-  (cube-iter 1.0 x))
+  (cube-iter 1.0 0 x))
