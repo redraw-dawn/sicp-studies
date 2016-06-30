@@ -23,5 +23,12 @@
         (and (> b a) (> c a)) (sumOfSquares b c)
         else (sumOfSquares a c)))
 ;; exercise 1.4
+;; can use a test to determine which operator to apply to operands
+
+;; exercise 1.5
 ;; applicative order would not result in eternal loop when it got to (p)
 
+;; exercise 1.6
+;; will be called indefinitely as only cond special form stops the evaluation at the predicate
+
+;; exercise 1.7

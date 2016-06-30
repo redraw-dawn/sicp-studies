@@ -141,3 +141,15 @@ OR
   (not (< x y)))
 
 ### 1.1.7 Example: Square Roots by Newton's Method
+
+* Procedures, like mathematical functions, return a value. However, they must be effective
+
+e.g. square root function in maths can be defined as:
+root x = the y such that y >= 0 and y^2 = x
+
+* This defines a function but is not directly translatable to a procedure.
+* The difference between function and a procedure is knowing the properties of something vs how to do it a.k.a
+  declarative knowledge vs imperative knowledge
+
+
+
