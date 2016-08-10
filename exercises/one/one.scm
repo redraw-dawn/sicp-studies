@@ -291,6 +291,16 @@
 ;; Write a procedure that computes f by means of a recursive process. Write a procedure that computes f by means of an iterative process.
 (define (f n)
   (if (< n 3) n
-  (+ (f (- n 1)) (* 2 (f (- n 2))) (* 3 (f (- n 3))))))
+  (+ (f (- n 1)) 
+    (* 2 (f (- n 2)))
+      (* 3 (f (- n 3))))))
 
 ;; Exercise 1.12
+;; pascals triangle
+;; if x/y == 0 || 1, then 1. if y > x then 0
+(define (pascals x y)
+	 (cond ((> x y) 0)
+       	((= x 0) 1)
+        ((= y 0) 1)
+        ((= x y) 1)
+        (else (+ (pascals x (- y 1)) (pascals (- x 1) (- y 1))))))
