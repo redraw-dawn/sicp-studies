@@ -74,3 +74,42 @@ i.e.
 * As a consequence, these languages describe iterative processes with looping constructs i.e. while, until, for.
 * Scheme does not share this defect and will execute an iterative process in constant space even if it is in a recursive procedure.
 * This is referred to as tail-recursion. With this iteration does not require a special looping construct unless for syntactic sugar.
+
+### 1.2.2 - Tree Recursion
+
+Defining the fibonnaci process as below creates what is known as tree recursion due to the pattern of evaluation (figure 1.5).
+
+(define (fib n)
+  (cond ((= n 0) 0)
+        ((= n 1) 1)
+        (else (+ (fib (- n 1))
+                 (fib (- n 2))))))
+
+To compute (fib 5) you must compute (fib 4) && (fib 3) and so on. Thus creating a tree like structure with "leaves". 
+This is a poor way to compute Fibonacci numbers because it duplicates a lot of computations (i.e. has to work out (fib 3) twice)
+
+* The number of leaves in the tree can be shown to be (fib (+ n 1)). 
+* Thus the process uses a number of steps thats grows exponentially with the input `n`.
+* The space required grows only linearly as we need only keep track of the node above us at any point in computation
+* In general, the number of steps required by a tree-recursive process will be proportional to number of nodes in tree && space will be proportional to max depth of the tree
+
+* It's possible to create an iterative process using a pair of integers (a & b) and a counter.
+* each time the process iterates, a will become (+ a b) and b will become original value of a
+* after applying this n times, a and b will to (fib (n + 1)) and (fib n) respectively.
+
+(define (fib n)
+  (fib-iter 1 0 n))
+
+(define (fib-iter a b count)
+  (if (= count 0)
+      b
+      (fib-iter (+ a b) a (- count 1))))
+
+* This method is a linear iteration.
+* The difference in steps between the two methods is one grows at (fib n) and one linear to n
+* Tree recursion can be a powerful tool to operate on hierarchically structures data (as opposed to numbers)
+* Although the tree-recursive process is inferior performance wise, it can be useful in helping us to understand and design programs
+* i.e. the tree-recursion method for fibonacci is a direct translation of the method but the iterative process required us to notice it could be done with three state variables.
+
+
+
