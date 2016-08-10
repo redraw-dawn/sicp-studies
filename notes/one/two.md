@@ -111,5 +111,42 @@ This is a poor way to compute Fibonacci numbers because it duplicates a lot of c
 * Although the tree-recursive process is inferior performance wise, it can be useful in helping us to understand and design programs
 * i.e. the tree-recursion method for fibonacci is a direct translation of the method but the iterative process required us to notice it could be done with three state variables.
 
+##### Counting Change example
+
+* Write a method which returns the amount of ways that change can be made for an amount given a series of coin denominations
+* Assuming the coins are arranged in an order the relation holds:
+	- The number of ways to make change for amount a using n coins equals:
+	1. Number of ways to make change for a using all but the first kind of coin
+	2. The number of ways to make change from a - d using all n coins where d is the first coin
+	3. Repeat this
+
+* The ways to make change can be split into two groups, those that use the first coin and those that dont.
+* Once steps 1 & 2 are completed once, you then have two branches with which to reapply that rule.
+* The degenerate cases are:
+1. if a == 0, we have 1 way to make change
+2. if a < 0, we have 0 ways
+3. if n == 0, we have 0 ways to make change
+  
+(define (count-change amount)
+  (cc amount 5))
+(define (cc amount kinds-of-coins)
+  (cond ((= amount 0) 1)
+        ((or (< amount 0) (= kinds-of-coins 0)) 0)
+        (else (+ (cc amount
+                     (- kinds-of-coins 1))
+                 (cc (- amount
+                        (first-denomination kinds-of-coins))
+                     kinds-of-coins)))))
+(define (first-denomination kinds-of-coins)
+  (cond ((= kinds-of-coins 1) 1)
+        ((= kinds-of-coins 2) 5)
+        ((= kinds-of-coins 3) 10)
+        ((= kinds-of-coins 4) 25)
+        ((= kinds-of-coins 5) 50)))
+
+* first-denomination takes an input to return the value of a coin to us (done in cents)		
+* This process generates a tree-recursive process with a large amount of redundancies similar to the fibonacci method
+* The observation that a tree-recursive process is highly inefficient but easy to understand has lead people to
+	get the best of both words by designing a smart compiler that optimised the procedure to be more efficient.
 
 
