@@ -150,3 +150,24 @@ This is a poor way to compute Fibonacci numbers because it duplicates a lot of c
 	get the best of both words by designing a smart compiler that optimised the procedure to be more efficient.
 
 
+#### Iterative Change Counter
+
+(define (count-change amount)
+	(change-iter 1 5 0 100 100))
+
+;; not properly changing the number coin for every iteration
+(define (change-iter coin-num secondary-coin-num num-of-coins num-of-ways main-amount secondary-amount)
+	(cond ((> coin-num num-of-coins) num-of-ways)
+	      ((< main-amount 0) num-of-ways)
+	      ((= secondary-amount 0) (CHANGE-ITER (+ NUM-OF-WAYS 1) (+ SECONDARY-COIN 1) ()))
+	      ((= main-amount 0) (CHANGE-ITER (+ NUM-OF-WAYS 1)))
+	      (else ((if (< secondary-amount 0)
+	                 (CHANGE-ITER)
+	                 (CHANGE-ITER))))))
+	                
+(define (first-denomination kinds-of-coins)
+  (cond ((= kinds-of-coins 1) 1)
+        ((= kinds-of-coins 2) 5)
+        ((= kinds-of-coins 3) 10)
+        ((= kinds-of-coins 4) 25)
+        ((= kinds-of-coins 5) 50)))
