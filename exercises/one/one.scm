@@ -22,6 +22,7 @@
   (cond (and (> a b) (> b c)) (sumOfSquares a b)
         (and (> b a) (> c a)) (sumOfSquares b c)
         else (sumOfSquares a c)))
+
 ;; exercise 1.4
 ;; can use a test to determine which operator to apply to operands
 
@@ -58,13 +59,12 @@
 ;; => 1.0201000124354351
 
 (define (good-enough-new guess prev-guess)
-  (< (abs (- guess prev-guess) ) 0.001))
+  (< (abs (- guess prev-guess)) 0.001))
 
 (define (sqrt-iter-new guess prev-guess x)
   (if (good-enough-new guess prev-guess)
       guess
-      (sqrt-iter-new (improve guess x) guess x)
-      ))
+      (sqrt-iter-new (improve guess x) guess x)))```j3
 
 (define (sqrt-new x)
   (sqrt-iter-new 1.0 0 x))
@@ -80,10 +80,7 @@
       ))
 
 (define (cube-improve guess x)
-  (/ (+ (/ x
-	   (square guess))
-	(* 2 guess))
-   3))
+  (/ (+ (/ x (square guess)) (* 2 guess)) 3))
 
 (define (cbrt x)
   (cube-iter 1.0 0 x))
@@ -289,11 +286,16 @@
 ;; Exercise 1.11
 ;; A function f is defined by the rule that f(n) = n if n<3 and f(n) = f(n - 1) + 2f(n - 2) + 3f(n - 3) if n> 3.
 ;; Write a procedure that computes f by means of a recursive process. Write a procedure that computes f by means of an iterative process.
+;; recursive
 (define (f n)
   (if (< n 3) n
   (+ (f (- n 1)) 
     (* 2 (f (- n 2)))
       (* 3 (f (- n 3))))))
+
+;; iterative
+(define (f n))
+(define (f-iter n state-variables))
 
 ;; Exercise 1.12
 ;; pascals triangle
