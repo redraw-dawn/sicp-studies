@@ -301,8 +301,55 @@
 ;; pascals triangle
 ;; if x/y == 0 || 1, then 1. if y > x then 0
 (define (pascals x y)
-	 (cond ((> x y) 0)
-       	((= x 0) 1)
-        ((= y 0) 1)
-        ((= x y) 1)
-        (else (+ (pascals x (- y 1)) (pascals (- x 1) (- y 1))))))
+  (cond
+   ((> x y) 0)
+   ((= x 0) 1)
+   ((= y 0) 1)
+   ((= x y) 1)
+   (else
+    (+ (pascals x (- y 1))
+       (pascals (- x 1) (- y 1))))))
+
+;; tail-recursive method to work out counting change
+(define one-coin-changer
+  (lambda (coin amount)
+    (cond
+    ((= amount 0) #t)
+    ((> 0 amount) #f)
+    (else
+     (one-coin-changer coin (- amount coin))))))
+
+(define get-coin-value
+  (lambda (coin-num)
+    (cond
+     ((= 0 coin-num) 1)
+     ((= 1 coin-num) 2)
+     (else 5))))
+
+(define get-num-of-ways
+  (lambda (coin-num amount)
+    (tail-recursive-coin-changer coin-num amount coin-num amount 0)))
+
+(define is-below-or-equal-to-zero?
+  (lambda (num num1)
+    (<= (- num num1) 0)))
+
+;; steps:
+;; 1. go through all coins from max-amount
+;; 2. minus working-coin from max-amount
+;; 3. if working-coin is 0 then minus max-coin from amount and repeat from step 1
+;; \-> conditions:
+;;   * if you minus max-coin from max-amount and (or (= it 0) (< it 0)) then (- max-coin 1)
+
+(define tail-recursive-coin-changer
+  (lambda (working-coin working-amount coin-to-minus max-coin original-amount ways-of-change)
+    (cond
+     ((= coin-to-minus 0) ways-of-change)
+     ((< working-coin 0)
+      (if ((is-below-or-equal-to-zero? working-amount coin-to-minus))
+	  (call again with decremented coin-to-minus)
+	  (call again with (- coin-to-minus working-amount))))
+     (else
+      (if (one-coin-changer working-coin working-amount)
+	  (increment ways-of-change && call again w/ decremented working-coin)
+	  (call again w/ decremented working-coin))))))
