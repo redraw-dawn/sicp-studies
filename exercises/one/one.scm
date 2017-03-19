@@ -324,7 +324,8 @@
     (cond
      ((= 0 coin-num) 1)
      ((= 1 coin-num) 2)
-     (else 5))))
+     ((= 2 coin-num) 5)
+     (else error "wrong coin value"))))
 
 (define get-num-of-ways
   (lambda (coin-num amount)
@@ -363,13 +364,22 @@
 	   coin-to-minus
 	   max-coin
 	   original-amount
-	   ways-of-change)
-	  )
-      )
+	   ways-of-change)))
      (else
       (if (one-coin-changer working-coin working-amount)
 	  ;; decrement working coin && increment ways of change 
-	  (coin-change-iter (decrement working-coin) working-amount coin-to-minus max-coin original-amount (increment ways-of-change))
+	  (coin-change-iter
+	   (decrement working-coin)
+	   working-amount
+	   coin-to-minus
+	   max-coin
+	   original-amount
+	   (increment ways-of-change))
 	  ;; decrement working coin
-	  (coin-change-iter (decrement working-coin) working-amount coin-to-minus max-coin original-amount ways-of-change)	  
-	  )))))
+	  (coin-change-iter
+	   (decrement working-coin)
+	   working-amount
+	   coin-to-minus
+	   max-coin
+	   original-amount
+	   ways-of-change))))))
