@@ -325,11 +325,17 @@
      ((= 0 coin-num) 1)
      ((= 1 coin-num) 2)
      ((= 2 coin-num) 5)
-     (else error "wrong coin value"))))
+     (else error (string "wrong coin value: " coin-num)))))
 
 (define get-num-of-ways
   (lambda (coin-num amount)
-    (coin-change-iter coin-num amount coin-num coin-num amount 0)))
+    (coin-change-iter
+     coin-num
+     amount
+     coin-num
+     coin-num
+     amount
+     0)))
 
 (define cannot-minus-coin?
   (lambda (num num1)
