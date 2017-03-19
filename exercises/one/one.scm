@@ -334,6 +334,14 @@
   (lambda (num num1)
     (<= (- num num1) 0)))
 
+(define decrement
+  (lambda (num)
+    (- 1 num)))
+
+(define increment
+  (lambda (num)
+    (+ 1 num)))
+
 ;; steps:
 ;; 1. go through all coins from max-amount
 ;; 2. minus working-coin from max-amount
@@ -351,5 +359,10 @@
 	  (call again with (- coin-to-minus working-amount))))
      (else
       (if (one-coin-changer working-coin working-amount)
-	  (increment ways-of-change && call again w/ decremented working-coin)
-	  (call again w/ decremented working-coin))))))
+	  ;; decrement working coin && increment ways of change 
+	  (tail-recursive-coin-changer (decrement working-coin) working-amount coin-to-minus max-coin original-amount (increment ways-of-change))
+	  ;; decrement working coin
+	  (tail-recursive-coin-changer (decrement working-coin) working-amount coin-to-minus max-coin original-amount ways-of-change)	  
+	  )))))
+
+(tail-recursive-coin-changer)
