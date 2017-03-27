@@ -317,75 +317,56 @@
     ((= amount 0) #t)
     ((> 0 amount) #f)
     (else
-     (one-coin-changer coin (- amount (get-coin-value coin)))))))
+     (one-coin-changer coin (- amount (get-coin-value coin "3")))))))
 
 (define get-coin-value
-  (lambda (coin-num)
+  (lambda (coin-num called-from)
     (cond
      ((= 0 coin-num) 1)
      ((= 1 coin-num) 2)
      ((= 2 coin-num) 5)
-     (else error (string "wrong coin value: " coin-num)))))
+     (else error (string "wrong coin value: " coin-num ". position: " called-from)))))
 
 (define get-num-of-ways
   (lambda (coin-num amount)
-    (coin-change-iter
-     coin-num
-     amount
-     coin-num
-     coin-num
-     amount
-     0)))
+    (coin-change-iter coin-num amount coin-num coin-num coin-num amount 0)))
 
 (define cannot-minus-coin?
   (lambda (num num1)
     (<= (- num num1) 0)))
 
-(define decrement
+(define --
   (lambda (num)
     (- 1 num)))
 
-(define increment
+(define ++
   (lambda (num)
     (+ 1 num)))
 
 (define coin-change-iter
-  (lambda (working-coin working-amount coin-to-minus max-coin original-amount ways-of-change)
+  (lambda (working-coin working-amount coin-to-minus max-minus max-coin original-amount ways-of-change)
     (cond
-     ((= coin-to-minus 0) ways-of-change)
+     ((= max-minus 0) ways-of-change)
      ((< working-coin 0)
-      (if (cannot-minus-coin? working-amount (get-coin-value coin-to-minus))
-	  ;;(reset working-coin with decremented coin-to-minus)
-	  (coin-change-iter
-	   (decrement max-coin)
-	   working-amount
-	   (decrement coin-to-minus)
-	   (decrement max-coin)
-	   original-amount
-	   ways-of-change)
-	  ;;(reset working-coin with (- coin-to-minus working-amount))
-	  (coin-change-iter
-	   max-coin
-	   (- working-amount (get-coin-value coin-to-minus))
-	   coin-to-minus
-	   max-coin
-	   original-amount
-	   ways-of-change)))
+      ;; insert under here
+      (if (= coin-to-minus 0)
+	  (coin-change-iter (-- max-coin) original-amount (-- max-minus) (-- max-minus) (-- (-- max-coin)) original-amount ways-of-change)
+	  (if (cannot-minus-coin? working-amount (get-coin-value coin-to-minus (string "1: " max-minus)))
+	      (coin-change-iter (-- max-coin) working-amount (-- coin-to-minus) max-minus (-- max-coin) original-amount ways-of-change)
+	      (coin-change-iter max-coin (- working-amount (get-coin-value coin-to-minus "2")) coin-to-minus max-minus max-coin original-amount ways-of-change)))
+      ;; insert ends here
+      )
      (else
       (if (one-coin-changer working-coin working-amount)
-	  ;; decrement working coin && increment ways of change 
-	  (coin-change-iter
-	   (decrement working-coin)
-	   working-amount
-	   coin-to-minus
-	   max-coin
-	   original-amount
-	   (increment ways-of-change))
-	  ;; decrement working coin
-	  (coin-change-iter
-	   (decrement working-coin)
-	   working-amount
-	   coin-to-minus
-	   max-coin
-	   original-amount
-	   ways-of-change))))))
+	  ;; -- working coin && ++ ways of change 
+	  (coin-change-iter (-- working-coin) working-amount coin-to-minus max-minus max-coin original-amount (++ ways-of-change))
+	  ;; -- working coin
+	  (coin-change-iter (-- working-coin) working-amount coin-to-minus max-minus max-coin original-amount ways-of-change))))))
+
+;; working-coin (-- (-- max-minus))  | (-- max-coin)
+;; working-amount original-amount    | working-amount
+;; coin-to-minus (-- max-minus)      | (-- coin-to-minus)
+;; max-minus (-- max-minus)          | max-minus
+;; max-coin (-- (-- max-minus))      | (-- max-coin)
+;; original-amount original-amount   | original-amount
+;; ways-of-change ways-of-change     | ways-of-change
