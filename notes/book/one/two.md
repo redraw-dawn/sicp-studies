@@ -149,7 +149,6 @@ This is a poor way to compute Fibonacci numbers because it duplicates a lot of c
 * The observation that a tree-recursive process is highly inefficient but easy to understand has lead people to
 	get the best of both words by designing a smart compiler that optimised the procedure to be more efficient.
 
-
 #### Iterative Change Counter
 
 (define (count-change amount)
@@ -171,3 +170,6 @@ This is a poor way to compute Fibonacci numbers because it duplicates a lot of c
         ((= kinds-of-coins 3) 10)
         ((= kinds-of-coins 4) 25)
         ((= kinds-of-coins 5) 50)))
+
+### 1.2.3 Orders Of Growth
+
