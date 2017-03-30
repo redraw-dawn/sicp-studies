@@ -173,3 +173,13 @@ This is a poor way to compute Fibonacci numbers because it duplicates a lot of c
 
 ### 1.2.3 Orders Of Growth
 
+* 'n' is the parameter which measures the size of a problem, i.e.
+  -> n could be the number of digits accuracy required on a calculation
+  -> n could be number of rows in a matrix
+* 'R(n)' represents the number of resources the process requires for a problem of size 'n', i.e.
+  -> this could be the internal storage registers used
+  -> this could be number of elementary machine operations
+* The notion of an "order of growth" is used to obtain a gross measure of the resources required by a process as the input becomes larger
+* There will often be a number of properties of a problem which will be useful to analyse a given process
+* In computers that only do a fixed amount of operations at a time, the time required will be proportional
+  to the number of elementary machine operations performed
