@@ -425,3 +425,18 @@
       1
       (* (term a)
 	 (product term (next a) next b))))
+
+(define (factorial n)
+  (define (identity x) x)
+  (define (inc n) (+ 1 n))
+  (product identity 1 inc n))
+
+;; John Wallis -> https://en.wikipedia.org/wiki/Wallis_product
+;; 2n/(2n - 1) * 2n/(2n + 1)
+(define (jw-pi n)
+  (define (double x) (* 2.0 x))
+  (define (term a)
+    (* (/ (double a) (- (double a) 1))
+       (/ (double a) (+ (double a) 1))))
+  (define (inc y) (+ 1 y))
+  (product term 1 inc n))
