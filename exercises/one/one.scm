@@ -370,3 +370,58 @@
 ;; max-coin (-- (-- max-minus))      | (-- max-coin)
 ;; original-amount original-amount   | original-amount
 ;; ways-of-change ways-of-change     | ways-of-change
+
+
+;; Exercise 1.29 Simpson's Rule
+(define (sum term a next b)
+  (if (> a b)
+      0
+      (+ (term a)
+	 (sum term (next a) next b))))
+
+(define (integral f a b dx)
+  (define (add-dx x) (+ x dx))
+  (* (sum f (+ a (/ dx 2.0)) add-dx b) dx))
+
+(define (inc n) (+ n 1))
+
+(define (simpsons f a b n)
+  (define h (/ (- b a) n))
+  (define (y k)
+    (f (+ a (* k h))))
+  (define (term k)
+    (* (cond ((odd? k) 4)
+	     ((or (= k 0) (= k n)) 1)
+	     (else 2))
+       (y k)))
+  (/ (* h (sum term 0 inc n)) 3))
+
+(define (cube x) (* x x x))
+
+(define (sum term a next b)
+  (if (> a b)
+      0
+      (+ (term a)
+	 (sum term (next a) next b))))
+
+;; Exercise 1.30
+(define (sum term a next b)
+  (define (iter a result)
+    (if (> a b)
+        result
+        (iter (next a) (+ (term a) result))))
+  (iter a 0))
+
+;; Exercise 1.31
+(define (product-tail term a next b)
+  (define (iter a result)
+    (if (> a b)
+	result
+	(iter (next a) (* (term a) result))))
+  (iter a 1))
+
+(define (product term a next b)
+  (if (> a b)
+      1
+      (* (term a)
+	 (product term (next a) next b))))
