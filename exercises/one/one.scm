@@ -440,3 +440,46 @@
        (/ (double a) (+ (double a) 1))))
   (define (inc y) (+ 1 y))
   (product term 1 inc n))
+
+;; Exercise 1.32
+;;(accumulate combiner null-value term a next b)
+(define (accumulate combiner null-value term a next b)
+  (if (> a b)
+      null-value
+      (combiner (term a)
+		(accumulate combiner null-value term (next a) next b))))
+
+(define (sum term a next b)
+  (accumulate + 0 term a next b))
+(define (product term a next b)
+  (accumulate * 1 term a next b))
+
+(define (accumulate-tail combiner null-value term a next b)
+  (define (iter a result)
+    (if (> a b)
+	result
+	(iter (next a) (combiner (term a) result))))
+  (iter a null-value))
+
+(define (sum-tail term a next b)
+  (accumulate-tail + 0 term a next b))
+(define (product-tail term a next b)
+  (accumulate-tail * 1 term a next b))
+
+;; Exercise 1.33
+;; filtered-accumulate
+(define (filtered-accumulate-tail combiner null-value term a next b filter)
+  (define (iter a result)
+    (cond ((> a b) result)
+	  ((not (filter a)) (iter (next a) result))
+	  (else (iter (next a) (combine (term a) result)))))
+  (iter a null-value))
+
+(define (filtered-accumulate combiner null-value term a next b filter)
+  (cond ((> a b) null-value)
+	((filter a)
+	 (combiner (term a) (filtered-accumulate combiner null-value term (next a) b filter)))
+	(else
+	 (filtered-accumulate combiner null-value term (next a) b filter))))
+
+;; check TLS to see how you used to do this
