@@ -482,4 +482,38 @@
 	(else
 	 (filtered-accumulate combiner null-value term (next a) b filter))))
 
-;; check TLS to see how you used to do this
+;; attempt at modulo but stopped before finished to
+;; implement sieve of erastothenes from memory (below)
+(define (reducer num reduce-by)
+  (cond
+   ((> 0 num) (reducer (- num reduce-by) reduce-by))
+   ((= 0 num) #t)
+   (else #f)))
+
+;; made for printing in repl
+(define (reverse ls result)
+  (cond ((null? ls) result)
+	(else
+	 (reverse (cdr ls) (cons (car ls) result)))))
+
+(define (member? n list)
+  (cond ((null? list) #f)
+	((= n (car list)) #t)
+	(else (member? n (cdr list)))))
+
+;; build the list of each new num and its multiples up to the max
+(define (add-to-list original current max result)
+  (define (inc n) (+ 1 n))
+  (cond ((> original max) result)
+	((> current max)
+	 (add-to-list (inc original) (* 2 (inc original)) max result))
+	((member? current result)
+	 (add-to-list original (+ current original) max result))
+	(else
+	 (add-to-list original (+ current original) max (cons current result))))
+  )
+
+;; check if num exists in list, if yes not prime
+(define (prime? n)
+  (define x (add-to-list 2 4 100 '()))
+  (not (member? n x)))
