@@ -521,7 +521,6 @@
 	  (else (loop (+ n 1) (if (member? n non-primes) result (cons n result))))))
     (loop 2 '()))
 
-;; check if num exists in list, if yes not prime
 (define (prime? n)
   (define x (get-non-primes 2 4 100 '()))
   (not (member? n x)))
