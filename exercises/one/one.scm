@@ -491,29 +491,37 @@
    (else #f)))
 
 ;; made for printing in repl
-(define (reverse ls result)
-  (cond ((null? ls) result)
-	(else
-	 (reverse (cdr ls) (cons (car ls) result)))))
+(define (reverse ls)
+  (define (loop ls result)
+    (cond ((null? ls) result)
+	  (else
+	   (loop (cdr ls) (cons (car ls) result)))))
+  (loop ls '()))
 
 (define (member? n list)
   (cond ((null? list) #f)
 	((= n (car list)) #t)
 	(else (member? n (cdr list)))))
 
-;; build the list of each new num and its multiples up to the max
-(define (add-to-list original current max result)
+(define (get-non-primes original current max result)
   (define (inc n) (+ 1 n))
   (cond ((> original max) result)
 	((> current max)
-	 (add-to-list (inc original) (* 2 (inc original)) max result))
+	 (get-non-primes (inc original) (* 2 (inc original)) max result))
 	((member? current result)
-	 (add-to-list original (+ current original) max result))
+	 (get-non-primes original (+ current original) max result))
 	(else
-	 (add-to-list original (+ current original) max (cons current result))))
-  )
+	 (get-non-primes original (+ current original) max (cons current result)))))
+
+(define (get-primes-under-100)
+  (define non-primes (get-non-primes 2 4 100 '()))
+  (define (loop n result)
+    (cond ((> n 100)
+	   result)
+	  (else (loop (+ n 1) (if (member? n non-primes) result (cons n result))))))
+    (loop 2 '()))
 
 ;; check if num exists in list, if yes not prime
 (define (prime? n)
-  (define x (add-to-list 2 4 100 '()))
+  (define x (get-non-primes 2 4 100 '()))
   (not (member? n x)))
