@@ -482,14 +482,6 @@
 	(else
 	 (filtered-accumulate combiner null-value term (next a) b filter))))
 
-;; attempt at modulo but stopped before finished to
-;; implement sieve of erastothenes from memory (below)
-(define (reducer num reduce-by)
-  (cond
-   ((> 0 num) (reducer (- num reduce-by) reduce-by))
-   ((= 0 num) #t)
-   (else #f)))
-
 ;; made for printing in repl
 (define (reverse ls)
   (define (loop ls result)
@@ -524,3 +516,22 @@
 (define (prime? n)
   (define x (get-non-primes 2 4 100 '()))
   (not (member? n x)))
+
+(define (square x) (* x x))
+
+;; the sum of the squares of the prime numbers in the interval a to b
+(define (sum-of-squared-primes a b)
+  (define min-a
+    (if (< a 3) 2 a))
+  (define list-of-non-primes
+    (get-non-primes min-a (* 2 min-a) b '()))
+  (filtered-accumulate-tail + 0 square a inc b prime?))
+
+;; 1.33 b - the product of all the positive integers less than n that are relatively prime to n
+
+(define (my-modulo num reduce-by)
+  (define result (- num reduce-by))
+  (cond
+   ((< 0 result) (my-modulo result reduce-by))
+   ((= 0 result) result)
+   (else num)))
