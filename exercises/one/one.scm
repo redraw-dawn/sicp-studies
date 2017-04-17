@@ -472,7 +472,7 @@
   (define (iter a result)
     (cond ((> a b) result)
 	  ((not (filter a)) (iter (next a) result))
-	  (else (iter (next a) (combine (term a) result)))))
+	  (else (iter (next a) (combiner (term a) result)))))
   (iter a null-value))
 
 (define (filtered-accumulate combiner null-value term a next b filter)
