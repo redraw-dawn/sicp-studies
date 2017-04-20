@@ -535,3 +535,29 @@
    ((< 0 result) (my-modulo result reduce-by))
    ((= 0 result) result)
    (else num)))
+
+(define (co-prime? a b)
+  (cond
+   ((or (= 1 a) (= 1 b)) #t)
+   ((= a b) #f)
+   (else
+    (if (> a b)
+	(co-prime? (- a b) b)
+	(co-prime? a (- b a))))))
+
+(define (sum-of-co-prime-numbers-under n)
+  (define (inc n) (+ 1 n))
+  (define (identity x) x)
+  (define (co-prime-check x) (co-prime? n x))
+  (filtered-accumulate-tail + 0 identity 1 inc n co-prime-check))
+
+;; to test call (= (sum-of-co-prime-numbers-under n) (apply + (list-co-primes-under n)))
+(define (list-co-primes-under n)
+  (define (iter current)
+    (cond
+     ((< current n)
+      (if (co-prime? current n)
+	  (cons current (iter (+ current 1)))
+	  (iter (+ current 1))))
+     (else '())))
+  (iter 1))
