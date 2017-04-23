@@ -561,3 +561,11 @@
 	  (iter (+ current 1))))
      (else '())))
   (iter 1))
+
+;; 1.34
+(define (f g)
+  (g 2))
+;; what happens when you apply f to f?
+(f f)
+(f (lambda g) (g 2))
+;; apply 2 to 2

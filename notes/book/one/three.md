@@ -132,3 +132,11 @@ The general form of a let expression is:
     <body>)
  <exp1> ... <expn>)
 
+* `let` is syntactic sugar for the above `lambda` application
+* scope of `let` is the body of the `let`
+* the variable values are computed outside of the let
+  -> cannot use one in the defintion of another esp when using variables which share names with others from outside the scope
+
+* You can also use internal definitions (`define`s) but it is preferred to use `let` for variables and `define` for procedures
+
+## 1.33 - Procedures as General Methods
