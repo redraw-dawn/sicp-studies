@@ -140,3 +140,40 @@ The general form of a let expression is:
 * You can also use internal definitions (`define`s) but it is preferred to use `let` for variables and `define` for procedures
 
 ## 1.33 - Procedures as General Methods
+
+#### Finding roots of equation with half-interval method
+
+* Finds root of an equation (`f(x) = 0`) where `f(a)` < 0 < `f(b)`
+* To start, make `x` the average of `a` and `b`.
+  -> If result < 0 then f has a 0 between `x` and `b`; else it's between `a` and `x`.
+* Reduce the interval constantly until it is deemed 'close enough'
+* As the interval reduces by half each time the number of steps grows as `<theta>(log( L/T))`
+  -> where L is length of original interval and T is error tolerance (what we consider 'close enough')
+
+(define (search f neg-point pos-point)
+  (let ((midpoint (average neg-point pos-point)))
+    (if (close-enough? neg-point pos-point)
+        midpoint
+        (let ((test-value (f midpoint)))
+          (cond ((positive? test-value)
+                 (search f neg-point midpoint))
+                ((negative? test-value)
+                 (search f midpoint pos-point))
+                (else midpoint))))))
+
+(define (close-enough? x y)
+  (< (abs (- x y)) 0.001))
+
+As search relies us to put in values which return negative and positive when applied to f it can be awkward to use.
+Therefore we use as:
+
+(define (half-interval-method f a b)
+  (let ((a-value (f a))
+        (b-value (f b)))
+    (cond ((and (negative? a-value) (positive? b-value))
+           (search f a b))
+          ((and (negative? b-value) (positive? a-value))
+           (search f b a))
+          (else
+           (error "Values are not of opposite sign" a b)))))
+
