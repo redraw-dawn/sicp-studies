@@ -177,3 +177,31 @@ Therefore we use as:
           (else
            (error "Values are not of opposite sign" a b)))))
 
+#### Finding fixed points of a function
+
+* A fixed point of a function satisfies `f(x) = x`
+* Start with an initial guess and apply `f` repeatedly, i.e. `f(x), f(f(x)), f(f(f(x))), etc` until the value does not change much/satisfies our close-enough criteria
+
+(define tolerance 0.00001)
+(define (fixed-point f first-guess)
+  (define (close-enough? v1 v2)
+    (< (abs (- v1 v2)) tolerance))
+  (define (try guess)
+    (let ((next (f guess)))
+      (if (close-enough? guess next)
+          next
+          (try next))))
+  (try first-guess))
+
+* i.e. can be used to find fixed point of cosine
+  -> (fixed-point cos 1.0)
+     .7390822985224023
+
+* With sqrt if you don't average the result then it oscillates on either side of the fixed point and will not come to a result
+
+(define (sqrt x)
+  (fixed-point (lambda (y) (average y (/ x y)))
+               1.0))
+
+* The technique of averaging successive approximations to a solution is called 'average damping' and aids the convergence of fixed-point searches
+
