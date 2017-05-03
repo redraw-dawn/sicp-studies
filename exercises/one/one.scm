@@ -617,13 +617,23 @@
 
 ;; 1.37
 ;; continued-fraction to evaluate k
-(define (inc n) (+ 1 n))
 (define (cont-frac n d k)
+  (define (inc n) (+ 1 n))
   (define (loop i)
     (if (= i k)
 	(/ (n k) (d k))
 	(/ (n i) (+ (d i) (loop (inc i))))))
   (loop 0))
 
-;; To get 1/golden-ratio accurate to 4dp k must be 10 with n and d both being (lambda (i) 1.0)
+;; To get 1/golden-ratio accurate to 4dp, k must equal 10 with n & d both being equal to (lambda (i) 1.0)
 
+;; 1.37b - if done recursively do iteratively, and vice versa
+(define (cont-frac-iter n d k)
+  (define (loop i result)
+    (if (< i 0)
+	result
+	(loop (- i 1) (/ (n i) (+ (d i) result))))
+    )
+  (loop (- k 1) (/ (n k) (d k))))
+
+;; Build result from other end as you cannot add to the bottom of the fraction
