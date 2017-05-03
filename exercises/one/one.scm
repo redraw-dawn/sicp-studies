@@ -596,7 +596,7 @@
   (fixed-point (lambda (x) (+ 1 (/ 1 x))) 1.0))
 
 ;; 1.36
-;; Add logging
+;; Add logging & damping
 (define tolerance 0.00001)
 (define (fixed-point f first-guess)
   (define (close-enough? v1 v2)
@@ -614,3 +614,16 @@
 
 (define with-damping
   (fixed-point (lambda (x) (/ (+ x (/ (log 1000) (log x))) 2)) 20.0))
+
+;; 1.37
+;; continued-fraction to evaluate k
+(define (inc n) (+ 1 n))
+(define (cont-frac n d k)
+  (define (loop i)
+    (if (= i k)
+	(/ (n k) (d k))
+	(/ (n i) (+ (d i) (loop (inc i))))))
+  (loop 0))
+
+;; To get 1/golden-ratio accurate to 4dp k must be 10 with n and d both being (lambda (i) 1.0)
+
