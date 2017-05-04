@@ -637,3 +637,13 @@
   (loop (- k 1) (/ (n k) (d k))))
 
 ;; Build result from other end as you cannot add to the bottom of the fraction
+
+
+;; 1.38
+;; Approximate e according to Euler's expansion
+(define (eulers-e k)
+  (define (d-fn i)
+    (if (= 2 (modulo i 3))
+	(* 2 (/ (+ i 1) 3.0))
+	1))
+  (cont-frac-iter (lambda (i) 1.0) d-fn k))
