@@ -623,7 +623,7 @@
     (if (= i k)
 	(/ (n k) (d k))
 	(/ (n i) (+ (d i) (loop (inc i))))))
-  (loop 0))
+  (loop 1))
 
 ;; To get 1/golden-ratio accurate to 4dp, k must equal 10 with n & d both being equal to (lambda (i) 1.0)
 
@@ -646,4 +646,14 @@
     (if (= 2 (modulo i 3))
 	(* 2 (/ (+ i 1) 3.0))
 	1))
-  (cont-frac-iter (lambda (i) 1.0) d-fn k))
+  (+ 2 (cont-frac (lambda (i) 1.0) d-fn k)))
+
+;; Have to add + 2 as the method results in e - 2
+
+;; 1.39
+;; Approximate J.H. Lambert's tan function
+(define (tan-cf x k)
+  (define (square x) (* x x))
+  (define (n-fn i) (if (= i 1) x (- (square x))))
+  (define (d-fn i) (- (* 2 i) 1))
+  (cont-frac n-fn d-fn 20.0))
