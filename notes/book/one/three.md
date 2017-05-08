@@ -205,3 +205,92 @@ Therefore we use as:
 
 * The technique of averaging successive approximations to a solution is called 'average damping' and aids the convergence of fixed-point searches
 
+## Procedures as Returned Values
+
+* Average damping is taking the average of a value and the value applied to a function, i.e.:
+
+(define (average-damping f)
+  (lambda (x) (average x (f x))))
+
+* This procedure that takes as its argument a procedure and returns a procedure.
+* i.e. can CURRY like this!!
+
+* Using this, we can reformat the sqrt procedure:
+
+(define (sqrt x)
+  (fixed-point (average-damping (lambda (y) (/ x y)))
+	       1.0))
+
+* This is the same method as described in 1.1.7 but with more abstractions resulting in clearer code
+* cube-root is y -> x/y^2 so we can generalise our sqrt code
+
+(define (cube-root x)
+  (fixed-point (average-damping (lambda (y) (/ x (square y))))
+	       1.0))
+
+#### Newton Method
+
+* Newton's method uses fixed point
+* f(x) = x - g(x) / Dg(x)
+* Dg(x) is the derivative of g procedure evaluated at x.
+* derivative of x^3 is 3x^2
+   -> can be expressed as:
+
+(define (deriv g)
+  (lambda (x)
+    (/ (- (g (+ x dx)) (g x))
+       dx)))
+
+where (define dx 0.00001)
+* deriv takes a procedure and returns a procedure.
+* deriv allows us to express Newton's method as a fixed-point procedure:
+
+(define (newton-transform g)
+  (lambda (x)
+    (- x (/ (g x) ((deriv g) x)))))
+;; ^^ this is the procedure described at beginning of the section
+
+(define (newtons-method g guess)
+  (fixed-point (newton-transform g) guess))
+
+* We can use this to find the square root of a procedure by using Newtown's method to find a zero of `y -> y^2 - x`, i.e.
+
+(define (sqrt x)
+  (newtons-method (lambda (y) (- (square y) x))
+                  1.0))
+
+
+### Abstractions as First Class Procedures
+
+* We've now seen 2 ways to find the square root as fixed points, and these can be generalised:
+
+(define (fixed-point-of-transform g transform guess)
+  (fixed-point (transform g) guess))
+
+* This takes function g, procedure that `transform`s g and an initial guess
+* Using this method we can rewrite our square root using average damping as:
+
+(define (sqrt x)
+  (fixed-point-of-transform (lambda (y) (/ x y))
+                            average-damp
+                            1.0))
+
+* and Newton's as:
+
+(define (sqrt x)
+  (fixed-point-of-transform (lambda (y) (- (square y) x))
+                            newton-transform
+                            1.0))
+
+* Programmers should be able to identify underlying abstractions, to build upon them and to generalise further & able to apply in new contexts
+* Higher-order procedures allow us to represent these abstractions as any other element in our language so they can be handled just like other computational elements
+
+* Programming languages implement restrictions on ways that computational elements can be manipulated.
+* Elements with fewer restrictions are said to have 'first-class' status
+* Some rights of 'first-class' status are:
+  -> They can be named by variables
+  -> They can be passed as arguments to procedures
+  -> They can be returned as results of procedures
+  -> They may be included in data structures
+
+* Lisp awards procedures full first-class status
