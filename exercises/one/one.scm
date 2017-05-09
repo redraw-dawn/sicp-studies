@@ -657,3 +657,81 @@
   (define (n-fn i) (if (= i 1) x (- (square x))))
   (define (d-fn i) (- (* 2 i) 1))
   (cont-frac n-fn d-fn 20.0))
+
+;; 1.40
+;; Define cubic to be used with newton's method which approximates zero of x^3 + ax^2 + bx + c.
+
+(define tolerance 0.00001)
+(define (fixed-point f first-guess)
+  (define (close-enough? v1 v2)
+    (< (abs (- v1 v2)) tolerance))
+  (define (try guess)
+    (let ((next (f guess)))
+      (if (close-enough? guess next)
+          next
+          (try next))))
+  (try first-guess))
+
+(define (newton-transform g)
+  (lambda (x)
+    (- x (/ (g x) ((deriv g) x)))))
+(define (newtons-method g guess)
+  (fixed-point (newton-transform g) guess))
+
+(define (cubic a b c)
+  (define (square c) (* c c))
+  (define (cube d) (* d d d))
+  (lambda (x)
+    (+ (cube x)
+       (* a (square x))
+       (* b x)
+       c)))
+
+;; 1.41
+;; Define a procedure, double, which takes an procedure of one argument
+(define (double f)
+  (lambda (x)
+    (f (f x))))
+
+;; (((double (double double)) inc) 5) returns 21
+
+;; 1.42
+;; Define a procedure, compose, which applies f after g, i.e. x -> f(g(x))
+
+(define (compose f g)
+  (lambda (x)
+    (f (g x))))
+
+;; 1.43
+;; Define a procedure, repeated, which takes f, a procedure, and n, a number, and returns a procedure that applies f n times
+
+(define (repeated f n)
+  (define (repeat x n)
+    (if (= n 0)
+	x
+	(f (repeat x (- n 1)))))
+  (lambda (x)
+    (repeat x n)))
+
+;; online solution which is nicer than mine & uses compose from ex1.42
+;; returns a f (procedure) to apply to compose procedure rather than building return value like mine
+(define (repeated f x)
+  (if (= x 1)
+      f
+      (compose f (repeated f (- x 1)))))
+
+;; 1.44
+;; If f is a procedure and dx is some small number, smoothing is when you average f(x - dx), f(x) and f(x + dx) 
+;; 1. Define a procedure, smooth, which takes a procedure which computes f and returns a prcocedure that returns a smoothed f.
+;; 2. Show how to get the n-fold smoothed function using smooth and repeated
+
+(define (smooth f dx)
+  (lambda (x)
+    (/ (+ (f (- x dx))
+	  (f x)
+	  (f (+ x dx)))
+       3
+       )))
+
+(define (n-fold-smooth f dx n)
+    (repeated (smooth f dx) n))
