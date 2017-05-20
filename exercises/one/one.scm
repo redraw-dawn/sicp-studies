@@ -760,31 +760,49 @@
           (try next))))
   (try first-guess))
 
-;; expt is built in exponential function (which takes two args :/ )
+;; expt is built in exponential function (which takes two args). read docs
 
-;; 1st test
+;; testing by (nth-root n (expt x n))
+
+;; 1st test goes till n = 8 (x^8)
 (define (nth-root n x)
   (fixed-point
    ((repeated average-damp 2)
     (lambda (y) (/ x (expt y (- n 1)))))
    1.0))
 
-;; 2nd test
+
+;; 2nd test goes till n = 16
 (define (nth-root n x)
   (fixed-point
    ((repeated average-damp 3)
     (lambda (y) (/ x (expt y (- n 1)))))
    1.0))
 
+;; 3rd test goes till n = 32
+(define (nth-root n x)
+  (fixed-point
+   ((repeated average-damp 4)
+    (lambda (y) (/ x (expt y (- n 1)))))
+   1.0))
 
-;; final
-(define (safe-half n)
-  (if (= 0 (modulo n 2))
-      (/ n 2)
-      (/ (- n 1) 2)))
+;; n can be evauluated up until it reaches 2^(repeat + 1)
+
+;; Final
+(define (is-less-than-what-power-of-two x)
+  (define (iter x n)
+    (if (< x (expt 2 n))
+	n
+	(iter x (+ n 1))))
+  (iter x 0))
+
+(define (repeat-n n)
+  (is-less-than-what-power-of-two n))
 
 (define (nth-root n x)
   (fixed-point
-   ((repeated average-damp (safe-half n))
+   ((repeated average-damp (repeat-n n))
     (lambda (y) (/ x (expt y (- n 1)))))
    1.0))
+
+;; 1.46
