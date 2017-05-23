@@ -806,3 +806,26 @@
    1.0))
 
 ;; 1.46
+;; make iterative improve which takes as args a procedure to check if answer is good
+;; enough and another to improve guess. returns a procedure which takes a guess
+
+(define (iterative-improve good-enough? improve)
+  (lambda (guess)
+    (let ((result (improve guess)))
+      (display result) (newline)
+      (if (good-enough? result)
+	  result
+	  ((iterative-improve good-enough? improve) result)))))
+
+(define (sqrt x)
+  ((iterative-improve
+    (lambda (guess) (< (abs (- (square guess) x)) 0.00001))
+    (lambda (guess) (/ (+ guess (/ x guess)) 2)))
+   1.0))
+
+(define (fixed-point f first-guess)
+  ((iterative-improve
+    (lambda (x)
+      (< (abs (- x (f x))) 0.00001))
+    f)
+   first-guess))
