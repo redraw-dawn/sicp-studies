@@ -372,6 +372,47 @@
 ;; ways-of-change ways-of-change     | ways-of-change
 
 
+;; Exercise 1.13
+
+;; i'll come back to counting change algorithm & this ^
+
+;; Exercise 1.14
+
+;; Space grows proportionally with tree depth which is affected by the input hence, O(n)
+;; Steps grow linearly with n? unsure how to do this
+
+;; Exercise 1.15
+
+(define (cube x) (* x x x))
+(define (p x) (- (* 3 x) (* 4 (cube x))))
+(define (sine angle)
+  ;; added logging
+  (display angle) (newline)
+  (if (not (> (abs angle) 0.1))
+      angle
+      (p (sine (/ angle 3.0)))))
+
+;; a) How many times is sine called when angle equals 12.15
+
+;; (sine 12.15)
+;; 12.15
+;; 4.05
+;; 1.3499999999999999
+;; .44999999999999996
+;; .15
+;; 4.9999999999999996e-2
+;Value: -.39980345741334
+
+;; Calls sine for each application of fn besides the last, so 5 times
+
+;; b) What is order of growth of steps and space?
+
+;; the value passed to sine would have to triple to add another step.
+;; the space required grows with tripling as well. only the call to p is deferred.
+;; They both are O(log n) according to:
+;; http://www.billthelizard.com/2009/12/sicp-exercise-115-calculating-sines.html
+;; I need to study algorithms and maths again :O
+
 ;; Exercise 1.29 Simpson's Rule
 (define (sum term a next b)
   (if (> a b)
