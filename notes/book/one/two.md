@@ -183,3 +183,52 @@ This is a poor way to compute Fibonacci numbers because it duplicates a lot of c
 * There will often be a number of properties of a problem which will be useful to analyse a given process
 * In computers that only do a fixed amount of operations at a time, the time required will be proportional
   to the number of elementary machine operations performed
+
+### 1.2.4 Exponentiation
+
+* b^n = b * b^(n-1) ... b^0 where b^0 = 1
+* in scheme...
+
+(define (expt b n)
+  (if (= n 0)
+      1
+      (* b (expt b (- n 1)))))
+
+* Above is a linearly recursive iteration with theta(n) steps and space
+* Below is an equivalent linear iterative approach which requires theta(n) steps and theta(1) space
+
+(define (expt b n)
+  (expt-iter b n 1))
+
+(define (expt-iter b counter product)
+  (if (= counter 0)
+      product
+      (expt-iter b
+                (- counter 1)
+                (* b product))))
+
+* Instead of computing b^8 as (b * (b * (b * (b * (b * (b * (b * b))))))) we can compute as:
+b^2 = b * b
+b^4 = b^2 * b^2
+b^8 = b^4 * b^4
+
+* This method works fine for exponents that are powers of 2. The following rule also applies:
+b^n = ( b^(n/2) )^2 if n is even
+b^n = b * b^(n-1)   if n is odd
+in scheme...
+
+(define (fast-expt b n)
+  (cond ((= n 0) 1)
+        ((even? n) (square (fast-expt b (/ n 2))))
+        (else (* b (fast-expt b (- n 1))))))
+
+(define (even? n)
+  (= (remainder n 2) 0))
+
+;; N.B. remainder and modulo are primitive procedures functioning like %
+
+* This process grows logarithmically with n in space and number of steps, as finding b^2n only requires 1 more multiplication.
+  -> has theta(log n) growth
+
+* Difference between theta(log n) and theta(n) grows large as n becomes larger,
+  -> i.e. when n = 100, fast-expt only requires 14 steps instead of 1000
