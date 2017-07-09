@@ -413,6 +413,38 @@
 ;; http://www.billthelizard.com/2009/12/sicp-exercise-115-calculating-sines.html
 ;; I need to study algorithms and maths again :O
 
+;; Exercise 1.16 Iterative Exponentiaton Procedure
+;; Use the observation that (b^(n/2))^2 == ((b^2)^(n/2))
+
+;; iterative but theta(n) for steps, not theta(log n)
+(define (fast-expt a b n)
+  (if (= n 0)
+      a
+      (fast-expt (* a b) b (- n 1))))
+
+(define (even? n)
+  (= 0 (modulo (abs n) 2)))
+;; make an internal loop procedure that removes the state variable a from initial method call
+
+(define (fast-expt a b n)
+  (cond ((= n 0) a)
+	((even? n)
+	 (fast-expt a (square b) (/ n 2)))
+	(else
+	 (fast-expt (* a b) b (- n 1)))))
+
+(define (logn-expt b n)
+  (define (even? n)
+    (= 0 (modulo (abs n) 2)))
+  (define (square x) (* x x))
+  (define (loop a b n)
+    (cond ((= n 0) a)
+	  ((even? n)
+	   (fast-expt a (square b) (/ n 2)))
+	  (else
+	   (fast-expt (* a b) b (- n 1)))))
+  (loop 1 b n))
+
 ;; Exercise 1.29 Simpson's Rule
 (define (sum term a next b)
   (if (> a b)
