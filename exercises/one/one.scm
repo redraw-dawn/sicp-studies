@@ -445,7 +445,20 @@
 	   (fast-expt (* a b) b (- n 1)))))
   (loop 1 b n))
 
-;; Ex 1.17 Iterative multiplication with addition
+;; Ex 1.17 Multiplication with log n steps
+(define (double n) (* 2 n))
+(define (halve n) (/ n 2))
+(define (even? n)
+  (= 0 (modulo (abs n) 2)))
+
+(define (fast-mult a b)
+  (cond ((= 0 b) 0)
+	((= 1 b) a)
+	((even? b) (fast-mult (double a) (halve b)))
+	(else (+ a (fast-mult a (- b 1))))))
+
+
+;; Ex 1.18 Iterative multiplication with addition
 (define (double n) (* 2 n))
 (define (halve n) (/ n 2))
 (define (even? n)
