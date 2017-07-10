@@ -445,6 +445,26 @@
 	   (fast-expt (* a b) b (- n 1)))))
   (loop 1 b n))
 
+;; Ex 1.17 Iterative multiplication with addition
+(define (double n) (* 2 n))
+(define (halve n) (/ n 2))
+(define (even? n)
+  (= 0 (modulo (abs n) 2)))
+
+(define (fast-multi a b n)
+  (cond ((= n 0) a)
+	((even? n)
+	 (fast-multi a (double b) (halve n)))
+	(else
+	 (fast-multi (+ a b) b (- n 1)))))
+
+(define (logn-multi b n)
+  (define (loop a b n)
+    (cond ((= n 0) a)
+	  ((even? n) (fast-multi a (double b) (halve n)))
+	  (else (fast-multi (+ a b) b (- n 1)))))
+  (loop 0 b n))
+
 ;; Exercise 1.29 Simpson's Rule
 (define (sum term a next b)
   (if (> a b)
