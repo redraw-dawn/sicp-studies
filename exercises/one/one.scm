@@ -457,7 +457,6 @@
 	((even? b) (fast-mult (double a) (halve b)))
 	(else (+ a (fast-mult a (- b 1))))))
 
-
 ;; Ex 1.18 Iterative multiplication with addition
 (define (double n) (* 2 n))
 (define (halve n) (/ n 2))
@@ -477,6 +476,25 @@
 	  ((even? n) (fast-multi a (double b) (halve n)))
 	  (else (fast-multi (+ a b) b (- n 1)))))
   (loop 0 b n))
+
+;; Ex 1.19
+(define (fib n)
+  (fib-iter 1 0 0 1 n))
+(define (fib-iter a b p q count)
+  (cond ((= count 0) b)
+        ((even? count)
+         (fib-iter a
+                   b
+                   (+ (square p) (square q))      ; compute p'
+                   (+ (square q) (* 2 p q))      ; compute q'
+                   (/ count 2)))
+        (else (fib-iter (+ (* b q) (* a q) (* a p))
+                        (+ (* b p) (* a q))
+                        p
+                        q
+                        (- count 1)))))
+
+(define (square x) (* x x))
 
 ;; Exercise 1.29 Simpson's Rule
 (define (sum term a next b)
