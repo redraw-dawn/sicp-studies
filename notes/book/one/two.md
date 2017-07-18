@@ -232,3 +232,25 @@ in scheme...
 
 * Difference between theta(log n) and theta(n) grows large as n becomes larger,
   -> i.e. when n = 100, fast-expt only requires 14 steps instead of 1000
+
+### 1.2.5 Greatest Common Divisors
+
+* Euclid's Algorithm -> If `r is the remainder of `a divided by `b, then the common
+  divisors of `a and `b are the same as of `b and `r, thus we can use:
+  ```GCD(a, b) = GCD(b, r)```
+  to reduce problem to smaller integers.
+
+(define (gcd a b)
+  (if (= b 0)
+      a
+      (gcd b (remainder a b))))
+
+* Steps grow as the logarithm of numbers involved (do more research into algorithms
+  to get a better grasp on this)
+
+* Lamé's theorem: if Euclid's Algorithm requires `k steps to compute the GCD of some
+  pair than the smaller number in the pair must be >= to `k-th Fibonacci number
+
+* Using above we can see that the order of growth...
+* if process takes `k steps then we have: n >= Fib(k) ~ theta^(`k)/sqrt(5)
+* therefore number of steps `k grows as logarithm of n hence = theta(log n)
