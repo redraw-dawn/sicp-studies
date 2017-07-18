@@ -496,6 +496,68 @@
 
 (define (square x) (* x x))
 
+;; Ex 1.20 Normal Order VS Applicative Order
+(define (gcd a b)
+  (if (= b 0)
+      a
+      (gcd b (remainder a b))))
+
+;; Normal Order
+(gcd 206 40)
+
+(if (= (remainder 206 40) 0) ;; evaluates * 1; 6
+    40
+    (gcd (remainder 206 40) (remainder 40 (remainder 206 40))))
+
+(if (= 0 (remainder 40 (remainder 206 40))) ;; evaluates * 2; 4 & 6
+    (remainder 206 40)
+    (gcd
+     (remainder 40 (remainder 206 40))
+     (remainder
+      (remainder 206 40)
+      (remainder 40 (remainder 206 40)))))
+;; a = (remainder 40 (remainder 206 40))
+;; b = (remainder (remainder 206 40) (remainder 40 (remainder 206 40)))
+
+ ;;      2            6,                4,            6 * 4
+(if (= (remainder (remainder 206 40) (remainder 40 (remainder 206 40))) 0)
+    (remainder 40 (remainder 206 40))
+    (gcd (remainder
+	  (remainder 206 40)
+	  (remainder 40 (remainder 206 40)))
+	 (remainder
+	  (remainder 40 (remainder 206 40))
+	  (remainder (remainder 206 40) (remainder 40 (remainder 206 40))))))
+;; a = (remainder (remainder 206 40) (remainder 40 (remainder 206 40)))
+;; b = (remainder (remainder 40 (remainder 206 40)) (remainder (remainder 206 40) (remainder 40 (remainder 206 40))))
+
+;;             2             4             6                  2           6                  4            6 * 7
+(if (= 0 (remainder (remainder 40 (remainder 206 40)) (remainder (remainder 206 40) (remainder 40 (remainder 206 40)))))
+    ;;      2           6                 4            6 * 4
+    (remainder (remainder 206 40) (remainder 40 (remainder 206 40)))
+    (gcd
+     (remainder
+      (remainder 40 (remainder 206 40))
+      (remainder (remainder 206 40) (remainder 40 (remainder 206 40))))
+     (remainder
+      (remainder (remainder 206 40) (remainder 40 (remainder 206 40)))
+      (remainder (remainder 40 (remainder 206 40)) (remainder (remainder 206 40) (remainder 40 (remainder 206 40)))))))
+
+;; evaluates 18 times. that was a mission. don't know if it was worth it.
+
+
+;; Applicative Order
+(gcd 206 40)
+(gcd 40 (remainder 206 40))
+(gcd 40 6)
+(gcd 6 (remainder 40 6))
+(gcd 6 4)
+(gcd 4 (remainder 6 4))
+(gcd 4 2)
+(gcd 2 (remainder 4 2))
+(gcd 2 0)
+2
+
 ;; Exercise 1.29 Simpson's Rule
 (define (sum term a next b)
   (if (> a b)
