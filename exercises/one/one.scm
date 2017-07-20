@@ -9,7 +9,7 @@
           )
        )
     )
- 
+
  (* 3
     (- 6 2)
     (- 2 7)
@@ -289,7 +289,7 @@
 ;; recursive
 (define (f n)
   (if (< n 3) n
-  (+ (f (- n 1)) 
+  (+ (f (- n 1))
     (* 2 (f (- n 2)))
       (* 3 (f (- n 3))))))
 
@@ -358,7 +358,7 @@
       )
      (else
       (if (one-coin-changer working-coin working-amount)
-	  ;; -- working coin && ++ ways of change 
+	  ;; -- working coin && ++ ways of change
 	  (coin-change-iter (-- working-coin) working-amount coin-to-minus max-minus max-coin original-amount (++ ways-of-change))
 	  ;; -- working coin
 	  (coin-change-iter (-- working-coin) working-amount coin-to-minus max-minus max-coin original-amount ways-of-change))))))
@@ -545,7 +545,6 @@
 
 ;; evaluates 18 times. that was a mission. don't know if it was worth it.
 
-
 ;; Applicative Order
 (gcd 206 40)
 (gcd 40 (remainder 206 40))
@@ -557,6 +556,39 @@
 (gcd 2 (remainder 4 2))
 (gcd 2 0)
 2
+
+;; Exercise 1.21
+;; 199 -> 199
+;; 1999 -> 1999
+;; 19999 -> 7
+
+;; Exercise 1.22
+(define (timed-prime-test n)
+  (newline)
+  (display n)
+  (start-prime-test n (runtime)))
+(define (start-prime-test n start-time)
+  (if (prime? n)
+      (report-prime (- (runtime) start-time))))
+(define (report-prime elapsed-time)
+  (display " *** ")
+  (display elapsed-time))
+
+;; Write a procedure search-for-primes that checks the primality of consecutive odd integers in a specified range
+(define (even? n)
+  (= 0 (modulo n 2)))
+
+(define (search-for-primes lower upper)
+  (cond ((> lower upper)
+	 (newline) (display "fini"))
+	((even? lower)
+	 (search-for-primes (+ 1 lower) upper))
+	(else
+	 (timed-prime-test lower)
+	 (search-for-primes (+ 2 lower) upper))))
+
+;; TODO: need to write procedure for prime?
+(define (prime? n))
 
 ;; Exercise 1.29 Simpson's Rule
 (define (sum term a next b)
@@ -907,7 +939,7 @@
       (compose f (repeated f (- x 1)))))
 
 ;; 1.44
-;; If f is a procedure and dx is some small number, smoothing is when you average f(x - dx), f(x) and f(x + dx) 
+;; If f is a procedure and dx is some small number, smoothing is when you average f(x - dx), f(x) and f(x + dx)
 ;; 1. Define a procedure, smooth, which takes a procedure which computes f and returns a prcocedure that returns a smoothed f.
 ;; 2. Show how to get the n-fold smoothed function using smooth and repeated
 
