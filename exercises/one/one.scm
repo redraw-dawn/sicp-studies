@@ -647,6 +647,20 @@
 ;; 'This technique is useful because it means we can perform our computation without
 ;; ever having to deal with numbers much larger than m'
 
+;; Exercise 1.26
+;; modified version which is slower than original
+(define (expmod base exp m)
+  (cond ((= exp 0) 1)
+        ((even? exp)
+         (remainder (* (expmod base (/ exp 2) m)
+                       (expmod base (/ exp 2) m))
+                    m))
+        (else
+         (remainder (* base (expmod base (- exp 1) m))
+                    m))))
+
+;; Generates a tree recursive process when exp is even which results in an exponential number of steps
+
 ;; Exercise 1.29 Simpson's Rule
 (define (sum term a next b)
   (if (> a b)
