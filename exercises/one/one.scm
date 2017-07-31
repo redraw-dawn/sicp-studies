@@ -587,8 +587,65 @@
 	 (timed-prime-test lower)
 	 (search-for-primes (+ 2 lower) upper))))
 
-;; TODO: need to write procedure for prime?
-(define (prime? n))
+;; reused method from 1.2.6 searching for divisors by succesive integers
+(define (smallest-divisor n)
+  (find-divisor n 2))
+(define (find-divisor n test-divisor)
+  (define (square x) (* x x))
+  (cond ((> (square test-divisor) n) n)
+        ((divides? test-divisor n) test-divisor)
+        (else (find-divisor n (+ test-divisor 1)))))
+(define (divides? a b)
+  (= (remainder b a) 0))
+
+(define (prime? n)
+  (= n (smallest-divisor n)))
+
+;; there's no way to get runtime value in scheme... There is in dr racket and chicken scheme. All my results show 0
+
+;; Exercise 1.23 define next procedure for smallest-divisor to not check even numbers
+(define (next n)
+  (cond ((= 2 n) 3)
+	((even? n) (+ n 1))
+	(else (+ n 2))))
+
+;; as above
+
+;; Exercise 1.24
+(define (fermat-test n)
+  (define (try-it a)
+    (= (expmod a n n) a))
+  (try-it (+ 1 (random (- n 1)))))
+
+(define (fast-prime? n times)
+  (cond ((= times 0) true)
+        ((fermat-test n) (fast-prime? n (- times 1)))
+        (else false)))
+
+(define (start-prime-test n start-time)
+  (if (fast-prime? n 50)
+      (report-prime (- (runtime) start-time))))
+
+(define (expmod base exp m)
+  (cond ((= exp 0) 1)
+        ((even? exp)
+         (remainder (square (expmod base (/ exp 2) m))
+                    m))
+        (else
+         (remainder (* base (expmod base (- exp 1) m))
+                    m))))
+
+;; insert into smallest-divisor helper method
+(define (find-divisor n test-divisor)
+  (define (square x) (* x x))
+  (cond ((> (square test-divisor) n) n)
+        ((divides? test-divisor n) test-divisor)
+        (else (find-divisor n (next test-divisor)))))
+
+;; Exercise 1.25 difference between fast-expt and expmod
+;; Using expmod is faster due to the technique used which according to the notes
+;; 'This technique is useful because it means we can perform our computation without
+;; ever having to deal with numbers much larger than m'
 
 ;; Exercise 1.29 Simpson's Rule
 (define (sum term a next b)
