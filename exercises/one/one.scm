@@ -661,6 +661,27 @@
 
 ;; Generates a tree recursive process when exp is even which results in an exponential number of steps
 
+;; Exercise 1.27 test fermat numbers
+(define (expmod base exp m)
+  (cond ((= exp 0) 1)
+        ((even? exp)
+         (remainder (square (expmod base (/ exp 2) m))
+                    m))
+        (else
+         (remainder (* base (expmod base (- exp 1) m))
+                    m))))
+
+(define (complete-fermat n)
+  (define (try-it a)
+    (= (expmod a n n) a))
+  (define (loop x)
+    (newline) (display x)
+    (cond ((= x n) #t)
+	  ((try-it x) (loop (+ x 1)))
+	  (else #f)))
+  (loop 1))
+
+
 ;; Exercise 1.29 Simpson's Rule
 (define (sum term a next b)
   (if (> a b)
