@@ -672,10 +672,10 @@
   (cond ((= exp 0) 1)
         ((even? exp)
          (remainder (square (expmod base (/ exp 2) m))
-                    m))
+		    m))
         (else
          (remainder (* base (expmod base (- exp 1) m))
-                    m))))
+		    m))))
 
 (define (complete-fermat n)
   (define (fermat-test a)
@@ -686,6 +686,65 @@
 	  ((fermat-test x) (loop (+ x 1)))
 	  (else #f)))
   (loop 1))
+
+;; Exercise 1.28 Miller-Rabin Test
+;; - if n is a prime and a is a positive number less than n, a^(n-1) is congruent to (modulo 1 n)
+;; when performing expmod we must check to see if we have a "nontrivial square root of 1 modulo n", i.e. a number not equal to 1 or (- n 1) whose square is equal to 1 modulo n
+;; if this nontrivial ... exists then n is not prime
+;; hint: have expmod return 0
+
+(define (miller-rabin n)
+  (define (try-it a)
+    (= 1 (expmod a (- n 1) n)))
+  (try-it (+ 2 (random (- n 2)))))
+
+(define (non-trivial-root x n)
+  (cond ((= 1 x) #f)
+	((= (- n 1) x) #f)
+	(else (= 1 (modulo (square x) n)))))
+
+(define (square-with-check x n)
+  (if (non-trivial-root x n)
+      0
+      (modulo (square x) n)))
+
+(define (even? n)
+  (= 0 (modulo n 2)))
+
+(define (expmod base exp m)
+  (cond ((= exp 0) 1)
+        ((even? exp)
+	 (square-with-check (expmod base (/ exp 2) m) m))
+         (else
+	  (remainder (* base (expmod base (- exp 1) m))
+		     m))))
+
+(define (tester-list)
+  (define (tester n)
+    (if (= n 100)
+	'()
+	(cons n (tester (+ n 1)))))
+  (tester 3))
+
+(define (cmap lat fn)
+  (cond ((null? lat) '())
+	(else
+	 (cons (fn (car lat))
+	       (cmap (cdr lat) fn)))))
+
+;; under 103...
+(define (test-under-hundred x)
+  (cmap (tester-list) miller-rabin))
+
+(define (return-primes lat)
+  (if (null? lat)
+      `()
+      (if (miller-rabin (car lat))
+	  (cons (car lat) (return-primes (cdr lat)))
+	  (return-primes (cdr lat)))))
+
+(define primes-in-tester-list
+  (return-primes (tester-list)))
 
 ;; Exercise 1.29 Simpson's Rule
 (define (sum term a next b)
