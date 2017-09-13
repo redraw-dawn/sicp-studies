@@ -105,3 +105,17 @@
     (cons (/ n g) (/ d g))))
 
 - This modification is able to made without changing any procedures that use rational numbers, i.e. add-rat, mul-rat, etc
+
+### 2.1.2 - Abstraction Barriers
+
+- "Data abstraction" -> identify for each data type a set of operations in which all manipulations of this type can be expressed and then use only these.
+- Programs contain "abstraction barriers" which isolate different levels of the system.
+- The barrier between levels separates the program that uses the data abstraction from the program that implements it.
+- Easier to maintain & modify programs if dependence on data structure representation is limited to few modules.
+
+- Using GCD example in rational numbers. We can reduce to lowest terms on construction of rational number or access.
+- If typical use is to access numerator and denominator it is optimal to compute lowest terms on construction.
+- If not, may be better to wait until accessing numerator or denominator.
+- These changes at the representation level do not affect the procedures add-rat, sub-rat, and so on
+
+- Abstraction barriers give the ability to continue development whilst deferring decison on how to implement data structure.
