@@ -1,4 +1,5 @@
 ;; Exercise 2.1
+;; Put GCD computation into make-rat
 (define (make-rat n d)
   (define (correct-sign x)
     (cond
@@ -11,6 +12,8 @@
     (cons (/ numerator g) (/ denominator g))))
 
 ;; Exercise 2.2
+;; Write segment and point constructors and selectors
+;; Write procedure to compute midpoint of a segment
 (define (make-segment start end)
   (cons start end))
 
