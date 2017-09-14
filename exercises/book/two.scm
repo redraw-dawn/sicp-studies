@@ -47,3 +47,42 @@
   (display ",")
   (display (y-point p))
   (display ")"))
+
+;; Exercise 2.3
+;; 1. Write constructors & selectors for a rectangle, procedures for perimeter calculation and area of rectangle
+
+;; CONSTRUCTOR
+;; Rectangle represented as pair of its two long sides
+(define (make-rect p1 p2 p3 p4)
+  (cons (make-segment p1 p2) (make-segment p3 p4)))
+
+;; SELECTORS
+(define (long-side rectangle)
+  (car rectangle))
+
+(define (short-side rectangle)
+  (make-segment
+   (end-segment (car rectangle))
+   (start-segment (cdr rectangle))))
+
+;; PROCEDURES A LEVEL OF ABSTRACTION AWAY
+(define (segment-length segment)
+  (define (segment-is-vertical? segment)
+    (= (x-point (start-segment segment)) (x-point (end-segment segment))))
+  (define (get-length segment getter)
+    (abs (- (getter (start-segment segment)) (getter (end-segment segment)))))
+  (if (segment-is-vertical? segment)
+      (get-length segment y-point)
+      (get-length segment x-point)))
+
+(define (perimeter rectangle)
+  (* 2
+     (+ (segment-length (long-side rectangle))
+	(segment-length (short-side rectangle)))))
+
+(define (area rectangle)
+  (* (segment-length (long-side rectangle))
+     (segment-length (short-side rectangle))))
+
+;; 2. Change constructor and selectors and check if procedures are abstracted enough that they still work
+;; e.g. do validation in construction, represent rectangle differently? by short sides?
