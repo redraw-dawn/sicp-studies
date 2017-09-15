@@ -1,5 +1,0 @@
-syntax: glob
-# Backup files left behind by emacs
-*~
-# lock files used by emacs
-.\#*
