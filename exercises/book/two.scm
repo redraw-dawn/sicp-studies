@@ -85,4 +85,15 @@
      (segment-length (short-side rectangle))))
 
 ;; 2. Change constructor and selectors and check if procedures are abstracted enough that they still work
-;; e.g. do validation in construction, represent rectangle differently? by short sides?
+(define (make-rectangle p1 p2 p3 p4)
+  (cons p1 (cons p2 (cons p3 p4))))
+
+(define (long-side rectangle)
+  (make-segment
+   (car rectangle)
+   (car (cdr rectangle))))
+
+(define (short-side rectangle)
+  (make-segment
+   (car rectangle)
+   (cdr (cdr (cdr rectangle)))))
