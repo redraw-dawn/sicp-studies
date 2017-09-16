@@ -53,7 +53,7 @@
 
 ;; CONSTRUCTOR
 ;; Rectangle represented as pair of its two long sides
-(define (make-rect p1 p2 p3 p4)
+(define (make-rectangle p1 p2 p3 p4)
   (cons (make-segment p1 p2) (make-segment p3 p4)))
 
 ;; SELECTORS
