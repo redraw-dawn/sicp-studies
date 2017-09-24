@@ -119,3 +119,25 @@
 - These changes at the representation level do not affect the procedures add-rat, sub-rat, and so on
 
 - Abstraction barriers give the ability to continue development whilst deferring decison on how to implement data structure.
+
+### 2.1.3 What is Meant by Data?
+
+- Data is defined by a collection of constructors and selectors that satisfy specified conditions, i.e:
+
+    x = (make-rat n d)
+    (numer x) / (denom x) === n / d
+
+- A pair doesn't have to be implemented by natural language features, simply needs to have car, cons and cdr.
+- A pair could be as follows:
+
+(define (cons x y)
+  (define (dispatch m)
+    (cond ((= m 0) x)
+          ((= m 1) y)
+          (else (error "Argument not 0 or 1 -- CONS" m))))
+  dispatch)
+(define (car z) (z 0))
+(define (cdr z) (z 1))
+
+- The difference is that cons as defined above returns a procedure
+- 'Message passing' -> the ability to manipilate procedures as objects
