@@ -97,3 +97,22 @@
   (make-segment
    (car rectangle)
    (cdr (cdr (cdr rectangle)))))
+
+
+;; Exercise 2.4
+;; a) Verify (car (cons x y)) works for any object x y
+(define (cons x y)
+  (lambda (m) (m x y)))
+
+(define (car z)
+  (z (lambda (p q) p)))
+
+(car (cons 1 2))
+(car (lambda (x) (m 1 2)))
+((lambda (m) (m 1 2)) (lambda (p q) p))
+((lambda (p q) p) 1 2)
+1
+
+;; b) Write cdr
+(define (cdr z)
+  (z (lambda (p q) q)))
