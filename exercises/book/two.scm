@@ -116,3 +116,21 @@
 ;; b) Write cdr
 (define (cdr z)
   (z (lambda (p q) q)))
+
+;; Exercise 2.5
+(define (cons a b)
+  (* (expt 2 a) (expt 3 b)))
+
+(define (is-even x)
+  (= 0 (modulo x 2)))
+
+(define (reduce-pair pair base count)
+  (if (= 0 (modulo pair base))
+      (reduce-pair (/ pair base) base (+ 1 count))
+      count))
+
+(define (car c)
+  (reduce-pair c 2 0))
+
+(define (cdr c)
+  (reduce-pair c 3 0))
