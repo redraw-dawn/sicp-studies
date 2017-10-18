@@ -209,7 +209,6 @@
       (f (f x)))))
 
 ;; Extended Exercise 2.1.4
-
 (define (add-interval x y)
   (make-interval (+ (lower-bound x) (lower-bound y))
                  (+ (upper-bound x) (upper-bound y))))
@@ -244,3 +243,9 @@
 
 (define (upper-bound interval)
   (get-bound interval >))
+
+;; Exercise 2.8
+;; Define sub-interval
+(define (sub-interval x y)
+  (make-interval (- (lower-bound x) (lower-bound y))
+		 (- (upper-bound x) (upper-bound y))))
