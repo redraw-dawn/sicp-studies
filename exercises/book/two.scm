@@ -249,3 +249,124 @@
 (define (sub-interval x y)
   (make-interval (- (lower-bound x) (lower-bound y))
 		 (- (upper-bound x) (upper-bound y))))
+
+;; Exercise 2.9
+;; Show width is a function of the widths being added/subtracted but not multiplied/divided
+(define (width interval)
+  (let ((distance (- (upper-bound interval) (lower-bound interval))))
+    (/ distance 2)))
+
+(define x (make-interval 2 8))
+;; (width x) = 3
+(define y (make-interval 3 7))
+;; (width y) = 2
+
+(define add (add-interval x y))
+;; (width add) = 5
+
+(define diff (sub-interval x y))
+;; (width diff) = 1
+
+(define mul (mul-interval x y))
+;; (width mul) = 25
+
+(define div (div-interval x y))
+;; (width div) = 1.1904761904761905
+
+;;Exercise 2.10
+;; Handle interval of length 0 by throwing error
+(define (make-interval a b)
+  (if (= a b)
+      (error "Must have a length greater than zero")
+      (cons a b)))
+
+;; Exercise 2.11
+;; Rewrite mul-interval with end point tests to minimise multiplications
+;; [+, +] * [+, +]
+;; [+, +] * [-, +]
+;; [+, +] * [-, -]
+
+;; [-, +] * [+, +]
+;; [-, +] * [-, +]
+;; [-, +] * [-, -]
+
+;; [-, -] * [+, +]
+;; [-, -] * [-, +]
+;; [-, -] * [-, -]
+(define (is-negative a)
+  (< a 0))
+(define (is-positive a)
+  (not (is-negative a)))
+
+(define (mul-interval x y)
+  (let ((xlo (lower-bound x))
+	(xhi (upper-bound x))
+	(ylo (lower-bound y))
+	(yhi (upper-bound y)))
+    (cond
+     ;; [+, +] & [+, +]
+     ((and (is-positive xlo)
+	   (is-positive xhi)
+	   (is-positive lower y)
+	   (is-positive yhi))
+      (make-interval (* xlo ylo)
+		     (* xhi yhi)))
+     ;; [+, +] & [-, +]
+     ((and (is-positive xlo)
+	   (is-positive xhi)
+	   (is-negative ylo)
+	   (is-positive yhi))
+      (make-interval (* xhi ylo)
+		     (* xhi yhi)))
+     ;; [+, +] & [-, -]
+     ((and (is-positive xlo)
+	   (is-positive xhi)
+	   (is-negative ylo)
+	   (is-negative yhi))
+      (make-interval (* xhi ylo)
+		     (* xlo yhi)))
+     ;; [-, +] & [+, +]
+     ((and (is-negative xlo)
+	   (is-positive xhi)
+	   (is-positive ylo)
+	   (is-positive yhi))
+      (make-interval (* xlo yhi)
+		     (* xhi yhi)))
+     ;; [-, +] & [-, +]
+     ((and (is-negative xlo)
+	   (is-positive xhi)
+	   (is-negative ylo)
+	   (is-positive yhi))
+      (make-interval (min (* xhi ylo) (* xlo yhi))
+		     (max (* ylo xlo) (* yhi xhi))))
+     ;; [-, +] & [-, -]
+     ((and (is-negative xlo)
+	   (is-positive xhi)
+	   (is-negative ylo)
+	   (is-negative yhi))
+      (make-interval (* xhi ylo)
+		     (* xlo ylo)))
+     ;; [-, -] & [+, +]
+     ((and (is-negative xlo)
+	   (is-negative xhi)
+	   (is-positive ylo)
+	   (is-positive yhi))
+      (make-interval (* xlo yhi)
+		     (* xhi ylo)))
+     ;; [-, -] & [-, +]
+     ((and (is-negative xlo)
+	   (is-negative xhi)
+	   (is-negative ylo)
+	   (is-positive yhi))
+      (make-interval (* xlo yhi)
+		     (* xlo ylo)))
+     ;; [-, -] & [-, -]
+     ((and (is-negative xlo)
+	   (is-negative xhi)
+	   (is-negative ylo)
+	   (is-negative yhi))
+      (make-interval (* xhi yhi)
+		     (* xlo ylo))))))
+
+;; Identify all possible cases & remember that when both are negative, hi is closest
+;;to 0 and when both positive lo is closest to 0
