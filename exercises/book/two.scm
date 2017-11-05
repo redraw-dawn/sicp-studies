@@ -298,7 +298,7 @@
 (define (is-positive a)
   (not (is-negative a)))
 
-(define (mul-interval x y)
+(define (mul-interval-case x y)
   (let ((xlo (lower-bound x))
 	(xhi (upper-bound x))
 	(ylo (lower-bound y))
@@ -307,7 +307,7 @@
      ;; [+, +] & [+, +]
      ((and (is-positive xlo)
 	   (is-positive xhi)
-	   (is-positive lower y)
+	   (is-positive ylo)
 	   (is-positive yhi))
       (make-interval (* xlo ylo)
 		     (* xhi yhi)))
@@ -368,5 +368,21 @@
       (make-interval (* xhi yhi)
 		     (* xlo ylo))))))
 
-;; Identify all possible cases & remember that when both are negative, hi is closest
-;;to 0 and when both positive lo is closest to 0
+;; Identify all possible cases & remember that when both are negative, high is closest
+;; to 0 and when both positive low is closest to 0
+
+;; (define a (make-interval 4 5))
+;; (define b (make-interval 5 9))
+
+;; (mul-interval a b)
+;; => (20 . 45)
+;; (mul-interval-case a b)
+;; => (20 . 45)
+
+;; (define c (make-interval -5 -4))
+;; (define d (make-interval -5 67))
+
+;; (mul-interval c d)
+;; => (-335 . 25)
+;; (mul-interval-case c d)
+;; => (-335 . 25)
