@@ -405,3 +405,23 @@
 
 (define (percent interval)
   (abs (/ (* (width interval) 1.0) (center interval))))
+
+;; Exercise 2.13
+;; Approximate percentage tolerance of product of two intervals in terms of tolerance of factors
+
+;; TESTING:
+;; (define a (make-center-percent 8 0.15))
+;; (define b (make-center-percent 10 0.10))
+;; (define c (make-center-percent 100 0.07))
+;; (define d (make-center-percent 120 0.05))
+
+;; (percent (mul-interval a b))
+;; => .24630541871921183
+
+;; (percent (mul-interval c d))
+;; => .11958146487294469
+
+;; therefore, for low tolerance intervals, tolerance of product can be approximated as the sum of the
+;; factors' tolerances
+(define (approx-tolerance-of-product a b)
+  (+ (percent a) (percent b)))
