@@ -386,3 +386,22 @@
 ;; => (-335 . 25)
 ;; (mul-interval-case c d)
 ;; => (-335 . 25)
+
+;; Exercise 2.12
+(define (make-center-width c w)
+  (make-interval (- c w) (+ c w)))
+(define (center i)
+  (/ (+ (lower-bound i) (upper-bound i)) 2))
+(define (width i)
+  (/ (- (upper-bound i) (lower-bound i)) 2))
+
+;; Define make-center-percent which constructs interval from centre and percentage of error
+;; where percent is the ratio of the width of the interval to the center
+;; Define selector 'percent' which calculates the uncertainty from the interval
+
+(define (make-center-percent center percent)
+  (let ((width (* center percent)))
+    (make-center-width center width)))
+
+(define (percent interval)
+  (abs (/ (* (width interval) 1.0) (center interval))))
