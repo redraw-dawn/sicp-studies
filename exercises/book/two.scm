@@ -400,11 +400,11 @@
 ;; Define selector 'percent' which calculates the uncertainty from the interval
 
 (define (make-center-percent center percent)
-  (let ((width (* center percent)))
+  (let ((width (* center (/ percent 100))))
     (make-center-width center width)))
 
 (define (percent interval)
-  (abs (/ (* (width interval) 1.0) (center interval))))
+  (abs (* 100 (/ (* (width interval) 1.0) (center interval)))))
 
 ;; Exercise 2.13
 ;; Approximate percentage tolerance of product of two intervals in terms of tolerance of factors
