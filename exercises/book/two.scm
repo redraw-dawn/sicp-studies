@@ -427,3 +427,33 @@
 ;; factors' tolerances
 (define (approx-tolerance-of-product a b)
   (+ (percent a) (percent b)))
+
+;; Exercise 2.14
+;; Demonstrate that these two algebraically equivalent functions return different results
+;; Investigate system's arithmetic functions
+;; Make intervals a & b; and compute a/a and a/b
+
+(define (par1 r1 r2)
+  (div-interval (mul-interval r1 r2)
+                (add-interval r1 r2)))
+(define (par2 r1 r2)
+  (let ((one (make-interval 1 1)))
+    (div-interval one
+                  (add-interval (div-interval one r1)
+                                (div-interval one r2)))))
+
+;; (define a (make-center-percent 100 5))
+;; (define b (make-center-percent 100 8))
+
+;; (par1 a b)
+;; => (41.032863849765256 . 60.64171122994652)
+
+;; (par2 a b)
+;; => (46.73796791443851 . 53.23943661971831)
+
+;; (define aa (div-interval a a))
+;; => (.9047619047619049 . 1.1052631578947367)
+;; N.B. -> Does not equal 1
+
+;; (define ab (div-interval a b))
+;; => (.8796296296296295 . 1.141304347826087)
