@@ -275,10 +275,12 @@
 
 ;;Exercise 2.10
 ;; Handle interval of length 0 by throwing error
-(define (make-interval a b)
-  (if (= a b)
-      (error "Must have a length greater than zero")
-      (cons a b)))
+(define (div-interval x y)
+  (if (or (= (lower-bound x) (upper-bound x)) (= (lower-bound y) (upper-bound y)))
+      (error "Cannot divide interval that spans 0")
+      (mul-interval x
+		    (make-interval (/ 1.0 (upper-bound y))
+				   (/ 1.0 (lower-bound y))))))
 
 ;; Exercise 2.11
 ;; Rewrite mul-interval with end point tests to minimise multiplications
