@@ -457,3 +457,10 @@
 
 ;; (define ab (div-interval a b))
 ;; => (.8796296296296295 . 1.141304347826087)
+
+;; Exercise 2.15
+;; Eva Lu Ator is right. Dividing an interval by itself does not equal 1. par1 is therefore not algebraically
+;; equivalent to par2. Using intervals multiple times isn't guaranteed to return the same values.
+
+;; Exercise 2.16
+;; An interval divided by itself does not equal 1.
