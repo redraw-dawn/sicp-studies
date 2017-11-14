@@ -469,7 +469,59 @@
 ;; Define a procedure last-pair that returns the list that contains only the last element of a given (nonempty) list
 ;; (last-pair (list 23 72 149 34))
 ;; => (34)
-(define (last-pair list)
-  (if (null? (cdr list))
-      list
-      (last-pair (cdr list))))
+(define (last-pair ls)
+  (if (null? (cdr ls))
+      ls
+      (last-pair (cdr ls))))
+
+;; Exercise 2.18
+;; Define a procedure reverse that takes a list as argument and returns a list of the same elements in reverse order:
+;; (reverse (list 1 4 9 16 25))
+;; => (25 16 9 4 1)
+
+(define (reverse ls)
+  (define (loop lst acc)
+    (if (null? lst)
+	acc
+	(loop (cdr lst) (cons (car lst) acc))))
+  (loop ls '()))
+
+;; from example
+(define (append list1 list2)
+  (if (null? list1)
+      list2
+      (cons (car list1) (append (cdr list1) list2))))
+
+(define (reverse ls)
+  (if (null? ls)
+      ls
+      (append (reverse (cdr ls)) (list (car ls)))))
+
+;; Exercise 2.19
+;; Define no-more?, first-denomination and except-first-denomination
+;; Does the order of the list affect the answer produced by cc? Why or why not?
+(define us-coins (list 50 25 10 5 1))
+(define uk-coins (list 100 50 20 10 5 2 1 0.5))
+
+(define (cc amount coin-values)
+  (cond ((= amount 0) 1)
+        ((or (< amount 0) (no-more? coin-values)) 0)
+        (else
+         (+ (cc amount
+                (except-first-denomination coin-values))
+            (cc (- amount
+                   (first-denomination coin-values))
+                coin-values)))))
+
+(define no-more? null?)
+(define first-denomination car)
+(define except-first-denomination cdr)
+
+;; (cc 100 us-coins)
+;; => 292
+
+;; (cc 100 (reverse us-coins))
+;; => 292
+
+;; Order does not affect the answer because the same nodes on the tree are generated
+;; regardless.
