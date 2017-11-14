@@ -525,3 +525,26 @@
 
 ;; Order does not affect the answer because the same nodes on the tree are generated
 ;; regardless.
+
+;; Exercise 2.20
+;; Write same-partity that takes a list of numbers and returns even/odd depending on
+;; the first arguments even/odd parity
+(define (even? n)
+  (= 0 (modulo n 2)))
+
+(define (odd? n)
+  (not (even? n)))
+
+(define (filter f ls)
+  (cond
+   ((null? ls) '())
+   ((f (car ls))
+    (cons (car ls) (filter f (cdr ls))))
+   (else
+    (filter f (cdr ls)))))
+
+(define (same-parity l . ls)
+  (let ((f (if (even? l)
+	       even?
+	       odd?)))
+    (cons l (filter f ls))))

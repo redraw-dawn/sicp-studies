@@ -60,3 +60,12 @@
   (if (null? list1)
       list2
       (cons (car list1) (append (cdr list1) list2))))
+
+- To give a procedure an arbitrary amount of args (such as in +, * or list), scheme uses dotted-tail notation
+- This is done by putting a dot (.) before the last argument, i.e.
+
+(define (f a b . c)
+	;; do stuff
+	)
+
+- c will be a list of arguments. N.B. can pass no args; this returns an empty list
