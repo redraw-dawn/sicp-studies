@@ -68,4 +68,17 @@
 	;; do stuff
 	)
 
-- c will be a list of arguments. N.B. can pass no args; this returns an empty list
+- `c` will be a list of arguments. N.B. can pass no args; this returns an empty list
+
+#### Mapping Over Lists
+
+- mapping is applying the same transformation to each element in a list and generating the list of results
+- `map` is a higher-order procedure which takes a procedure of one argument and a list and returns a list of results by applying the procedure to each element of the list
+
+(define (map proc items)
+  (if (null? items)
+      nil
+      (cons (proc (car items))
+            (map proc (cdr items)))))
+
+- `map` is important because it acts as an abstraction barrier between the procedures that transform lists and the procedures that extract and combine elements of the list so we could in theory change how sequences are implemented without affecting higher-level concepts
