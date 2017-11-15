@@ -548,3 +548,17 @@
 	       even?
 	       odd?)))
     (cons l (filter f ls))))
+
+
+;; Ex 2.21
+;; Fill in the gaps of square-list
+(define (square x)
+  (* x x))
+
+(define (square-list items)
+  (if (null? items)
+      '()
+      (cons (square (car items)) (square-list (cdr items)))))
+
+(define (square-list items)
+  (map square items))
