@@ -562,3 +562,36 @@
 
 (define (square-list items)
   (map square items))
+
+;; Exercise 2.22
+;; Explain why this gives reverse
+(define (square-list items)
+  (define (iter things answer)
+    (if (null? things)
+        answer
+        (iter (cdr things)
+              (cons (square (car things))
+                    answer))))
+  (iter items '()))
+
+;; And explain why this doesn't work
+(define (square-list items)
+  (define (iter things answer)
+    (if (null? things)
+        answer
+        (iter (cdr things)
+              (cons answer
+                    (square (car things))))))
+  (iter items '()))
+
+;; 1 - The list is built by appending the first item onto the empty list, then the second onto the first, etc
+;; 2 - The base of the list must be a nil/'() otherwise it will build a pair
+
+;; Exercise 2.23
+;; for-each is like map except the no value is returned Define for-each
+(define (for-each ls fn)
+  (if (null? ls)
+      #t
+      (begin
+	(fn (car ls))
+	(for-each (cdr ls) fn))))
