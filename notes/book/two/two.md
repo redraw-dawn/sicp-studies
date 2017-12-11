@@ -82,3 +82,16 @@
             (map proc (cdr items)))))
 
 - `map` is important because it acts as an abstraction barrier between the procedures that transform lists and the procedures that extract and combine elements of the list so we could in theory change how sequences are implemented without affecting higher-level concepts
+
+### 2.2.2 Hierarchical Structures
+
+- Sequences made up of sequences can be thought of to be structured as trees
+- Operations on tree structures are a natural fit for recursion as they can be reduced to operations on their branches
+
+(define (count-leaves x)
+  (cond ((null? x) 0)
+        ((not (pair? x)) 1)
+        (else (+ (count-leaves (car x))
+                 (count-leaves (cdr x))))))
+
+- Scheme has the primitive `pair?` which tests if the argument is a pair or not
