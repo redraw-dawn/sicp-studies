@@ -595,3 +595,38 @@
       (begin
 	(fn (car ls))
 	(for-each (cdr ls) fn))))
+
+;; Exercise 2.24
+;; Suppose we evaluate the expression (list 1 (list 2 (list 3 4))). Give the result
+;; printed by the interpreter, the corresponding box-and-pointer structure, and the
+;; interpretation of this as a tree (as in figure 2.6).
+
+;; (1 (2 (3 4)))
+;; I've done the box and pointer and tree structure drawings on paper. You'll have to trust that.
+
+;; Exercise 2.25
+;; Give combinations of cars and cdrs that will pick 7 from each of the following lists:
+
+(define one (list 1 3 (list 5 7) 9))
+(car (cdr (car (cdr (cdr one)))))
+
+(define two (list (list 7)))
+(car (car two))
+
+;; (1 (2 (3 (4 (5 (6 7))))))
+(define three (list 1 (list 2 (list 3 (list 4 (list 5 (list 6 7)))))))
+(car (cdr (car (cdr (car (cdr (car (cdr (car (cdr (car (cdr three))))))))))))
+
+;; Exercise 2.26
+(define x (list 1 2 3))
+(define y (list 4 5 6))
+
+;; What are the printed results of:
+;; (append x y)
+(1 2 3 4 5 6)
+
+;; (cons x y)
+((1 2 3) 3 4 5)
+
+;; (list x y)
+((1 2 3) (4 5 6))
