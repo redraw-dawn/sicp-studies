@@ -630,3 +630,17 @@
 
 ;; (list x y)
 ((1 2 3) (4 5 6))
+
+;; Exercise 2.27
+;; Modify your reverse procedure of exercise 2.18 to produce a deep-reverse procedure
+;; that takes a list as argument and returns as its value the list with its elements
+;; reversed and with all sublists deep-reversed as well.
+(define (deep-reverse ls)
+  (cond ((null? ls)
+	 ls)
+	((and (pair? (car ls)) (null? (cdr ls)))
+	 (list (deep-reverse (car ls))))
+	((pair? (car ls))
+	 (append (deep-reverse (cdr ls)) (list (deep-reverse (car ls)))))
+	(else
+	 (append (deep-reverse (cdr ls)) (list (car ls))))))
