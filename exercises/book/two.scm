@@ -644,3 +644,16 @@
 	 (append (deep-reverse (cdr ls)) (list (deep-reverse (car ls)))))
 	(else
 	 (append (deep-reverse (cdr ls)) (list (car ls))))))
+
+;; Exercise 2.28
+;; Write a procedure fringe that takes as argument a tree (represented as a list)
+;; and returns a list whose elements are all the leaves of the tree arranged in
+;; left-to-right order.
+
+(define (fringe ls)
+  (cond
+   ((null? ls) ls)
+   ((pair? (car ls))
+    (append (fringe (car ls)) (fringe (cdr ls))))
+   (else
+    (cons (car ls) (fringe (cdr ls))))))
