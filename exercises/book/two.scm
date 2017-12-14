@@ -657,3 +657,51 @@
     (append (fringe (car ls)) (fringe (cdr ls))))
    (else
     (cons (car ls) (fringe (cdr ls))))))
+
+;; Exercise 2.29
+;; A binary mobile consists of two branches, a left branch and a right branch.
+;; Each branch is a rod of a certain length, from which hangs either a weight or
+;; another binary mobile. We can represent a binary mobile using compound data by
+;; constructing it from two branches
+
+(define (make-mobile left right)
+  (list left right))
+
+;; A branch is constructed from a length (which must be a number) together with a
+;; structure, which may be either a number (representing a simple weight) or another mobile
+
+(define (make-branch length structure)
+  (list length structure))
+
+;; a. Write the corresponding selectors left-branch and right-branch, which return
+;; the branches of a mobile, and branch-length and branch-structure, which return
+;; the components of a branch.
+
+(define (left-branch mobile)
+  (car mobile))
+
+(define (right-branch mobile)
+  (car (cdr mobile)))
+
+(define (branch-length branch)
+  (car branch))
+
+;; Structure is either the weight (number) or a mobile -> Either[Weight, Mobile]
+(define (branch-structure branch)
+  (car (cdr branch)))
+
+;; b. Using your selectors, define a procedure total-weight that returns the total
+;; weight of a mobile.
+
+(define (total-weight mobile)
+  (add-branches mobile))
+
+(define (add-branches mobile)
+  (+ (handle-branch (left-branch mobile))
+     (handle-branch (right-branch mobile))))
+
+(define (handle-branch branch)
+  (let ((structure (branch-structure branch)))
+    (if (pair? structure)
+	(add-branches structure)
+	structure)))
