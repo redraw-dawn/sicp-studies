@@ -712,7 +712,7 @@
 ;; product for the right side) and if each of the submobiles hanging off its branches
 ;; is balanced. Design a predicate that tests whether a binary mobile is balanced.
 
-(define (balanced-mobile? mobile)
+(define (balanced? mobile)
   (and (= (branch-torque (left-branch mobile))
 	  (branch-torque (right-branch mobile)))
        (balanced-branch? (left-branch mobile))
@@ -725,5 +725,19 @@
 ;; At every level check torque and if structure is a mobile check the next level down
 (define (balanced-branch? branch)
   (if (pair? (branch-structure branch))
-      (balanced-mobile? (branch-structure branch))
+      (balanced? (branch-structure branch))
       #t))
+
+;; must be true (balanced)
+(define a (make-mobile (make-branch 3 9) (make-branch 2 13.5)))
+(balanced? a)
+;; Value: #t
+
+;; must be false
+(define b (make-mobile (make-branch 2 8) (make-branch)))
+(balanced? b)
+;; Value: #f
+
+(define c (make-mobile (make-branch 2 a) (make-branch 2 a)))
+(balanced? c)
+;; Value: #t
