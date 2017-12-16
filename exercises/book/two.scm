@@ -705,3 +705,25 @@
     (if (pair? structure)
 	(add-branches structure)
 	structure)))
+
+;; c. A mobile is said to be balanced if the torque applied by its top-left branch is
+;; equal to that applied by its top-right branch (that is, if the length of the left
+;; rod multiplied by the weight hanging from that rod is equal to the corresponding
+;; product for the right side) and if each of the submobiles hanging off its branches
+;; is balanced. Design a predicate that tests whether a binary mobile is balanced.
+
+(define (balanced-mobile? mobile)
+  (and (= (branch-torque (left-branch mobile))
+	  (branch-torque (right-branch mobile)))
+       (balanced-branch? (left-branch mobile))
+       (balanced-branch? (right-branch mobile))))
+
+(define (branch-torque branch)
+  (* (handle-branch branch)
+     (branch-length branch)))
+
+;; At every level check torque and if structure is a mobile check the next level down
+(define (balanced-branch? branch)
+  (if (pair? (branch-structure branch))
+      (balanced-mobile? (branch-structure branch))
+      #t))
