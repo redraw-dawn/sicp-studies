@@ -744,3 +744,17 @@
 (define c (make-mobile (make-branch 2 a) (make-branch 2 a)))
 (balanced? c)
 ;; Value: #t
+
+;; d. Change constructors and see how much of the programs need to change to
+;; accommodate new structure
+
+(define (make-mobile left right)
+  (cons left right))
+(define (make-branch length structure)
+  (cons length structure))
+
+(define (right-branch mobile)
+  (cdr mobile))
+
+(define (branch-structure branch)
+  (cdr branch))
