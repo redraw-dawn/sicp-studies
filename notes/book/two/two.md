@@ -95,3 +95,7 @@
                  (count-leaves (cdr x))))))
 
 - Scheme has the primitive `pair?` which tests if the argument is a pair or not
+
+#### Mapping Over Trees
+
+- To map over a tree, regard it as a list of subtrees

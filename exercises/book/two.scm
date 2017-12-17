@@ -758,3 +758,25 @@
 
 (define (branch-structure branch)
   (cdr branch))
+
+
+;; Exercise 2.30
+;; Define square-tree both directly (i.e., without using any higher-order procedures)
+;; and also by using map and recursion.
+
+(define (square-tree tree)
+  (cond
+   ((null? tree) '())
+   ((pair? (car tree))
+    (cons (square-tree (car tree))
+	  (square-tree (cdr tree))))
+   (else
+    (cons (* (square (car tree)))
+	  (square-tree (cdr tree))))))
+
+(define (square-tree-map tree)
+  (map (lambda (subtree)
+	 (if (pair? subtree)
+	     (square-tree-map subtree)
+	     (square subtree)))
+       tree))
