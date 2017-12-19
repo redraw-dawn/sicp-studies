@@ -807,9 +807,13 @@
       (list nil)
       (let ((rest (subsets (cdr s))))
         (append rest (map (lambda (x)
-			    (fringe (if (null? x)
-					(list (car s))
-					(cons (car s) (list x)))))
+			    (cons (car s) x))
 			  rest)))))
 
-;; TODO: Explanation
+;; Every level of recursion, the head of the list is appended to every combination
+;; list of the tail.
+
+;; (1 2 3) -> 1 (2 3)
+;; (2 3)   -> 2 (3)
+;; (3)     -> 3 ()
+;; ()
