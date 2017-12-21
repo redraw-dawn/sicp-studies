@@ -99,3 +99,31 @@
 #### Mapping Over Trees
 
 - To map over a tree, regard it as a list of subtrees
+
+### 2.2.3 Sequences as Conventional Interfaces
+
+- Conventional interfaces are a design principle for working with data structures
+
+(define (sum-odd-squares tree)
+  (cond ((null? tree) 0)
+        ((not (pair? tree))
+         (if (odd? tree) (square tree) 0))
+        (else (+ (sum-odd-squares (car tree))
+                 (sum-odd-squares (cdr tree))))))
+
+(define (even-fibs n)
+  (define (next k)
+    (if (> k n)
+        nil
+        (let ((f (fib k)))
+          (if (even? f)
+              (cons f (next (+ k 1)))
+              (next (+ k 1))))))
+  (next 0))
+
+- A common pattern can be derived from these two procedures:
+  -> enumerate, filter/map (`collect` in scala), accumulates
+- the higher order function map is referred to as a transducer
+
+- These two procedures do not implement the signal flow structure shown in book
+  in an isolated manner so cannot be refactored in their current form.
