@@ -121,9 +121,83 @@
               (next (+ k 1))))))
   (next 0))
 
-- A common pattern can be derived from these two procedures:
-  -> enumerate, filter/map (`collect` in scala), accumulates
-- the higher order function map is referred to as a transducer
+- A common pattern (referred to as signals) can be derived from these two procedures:
 
+* Enumerate through collection
+* Filter collection
+* Map collection (filter + map = `collect` in scala)
+* Accumulate the results
+
+- the higher order function map is referred to as a transducer -> changes state
 - These two procedures do not implement the signal flow structure shown in book
   in an isolated manner so cannot be refactored in their current form.
+- Their enumeration, filtering & accumulation is done in multiple locations
+
+#### Sequence Operations
+
+- filter operation on list can be defined as:
+
+(define (filter predicate sequence)
+  (cond ((null? sequence) nil)
+        ((predicate (car sequence))
+         (cons (car sequence)
+               (filter predicate (cdr sequence))))
+        (else (filter predicate (cdr sequence)))))
+
+- accumation defined as:
+
+(define (accumulate op initial sequence)
+  (if (null? sequence)
+      initial
+      (op (car sequence)
+          (accumulate op initial (cdr sequence)))))
+
+- enumerate (generate sequence of elements to be processed) intervals:
+
+(define (enumerate-interval low high)
+  (if (> low high)
+      nil
+      (cons low (enumerate-interval (+ low 1) high))))
+
+- enumerate a tree (same as fringe procedure done in ex2.28):
+
+(define (enumerate-tree tree)
+  (cond ((null? tree) nil)
+        ((not (pair? tree)) (list tree))
+        (else (append (enumerate-tree (car tree))
+                      (enumerate-tree (cdr tree))))))
+
+- Now we can refactor sum-odd-squares and even-fibs as in the signal diagrams.
+- sum-odd-squares we enumerate leaves of tree, filter the odd ones, square each
+  element and sum
+
+(define (sum-odd-squares tree)
+  (accumulate +
+              0
+              (map square
+                   (filter odd?
+                           (enumerate-tree tree)))))
+
+- even-fibs enumerates integers, generates fibonacci sequence for them, filters
+  to keep only even elements, accumulates result
+
+(define (even-fibs n)
+  (accumulate cons
+              nil
+              (filter even?
+                      (map fib
+                           (enumerate-interval 0 n)))))
+
+- Expressing programs as sequence operations allows one to design programs that
+  are modular (constructed by relatively independent pieces).
+- Modular design can be encouraged by providing standard library of components
+  and interface for connecting/operating on the components
+
+- Sequences (lists) serve as a interface that allow us to combine processing
+  modules.
+
+- When all structures are represented as sequences the data-structure specific
+  code is limited to a minimal amount of operations.
+
+- This allows us to modify the representations of sequences whilst leaving programs
+  in tact.
