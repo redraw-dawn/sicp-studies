@@ -835,6 +835,14 @@
 ;; Exercise 2.34
 ;; Write missing lambda for Horner's rule method
 
+;; Notes:
+;; 1
+;; x(1) + 0
+;; x(x(1) + 0) + 5
+;; x(x(x(1) + 0) + 5) + 0
+;; x(x(x(x(1) + 0) + 5) + 0) + 3
+;; x(x(x(x(x(1) + 0) + 5) + 0) + 3) + 1
+
 (define (horner-eval x coefficient-sequence)
   (accumulate (lambda (this-coeff higher-terms)
 		(+ (* x higher-terms) this-coeff))
