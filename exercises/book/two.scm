@@ -831,3 +831,12 @@
 
 (define (length sequence)
   (accumulate (lambda (x y) (+ 1 y)) 0 sequence))
+
+;; Exercise 2.34
+;; Write missing lambda for Horner's rule method
+
+(define (horner-eval x coefficient-sequence)
+  (accumulate (lambda (this-coeff higher-terms)
+		(+ (* x higher-terms) this-coeff))
+              0
+              coefficient-sequence))
