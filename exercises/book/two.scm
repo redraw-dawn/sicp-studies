@@ -866,3 +866,17 @@
 
 (define (count-leaves t)
   (accumulate + 0 (map (lambda (x) 1) (enumerate-tree t))))
+
+;; Exercise 2.36
+;; Fill in the missing expressions of accumulate-n
+(define (accumulate-n op init seqs)
+  (if (null? (car seqs))
+      nil
+      (cons (accumulate op init <??>)
+            (accumulate-n op init <??>))))
+
+(define (accumulate-n op init seqs)
+  (if (null? (car seqs))
+      nil
+      (cons (accumulate op init (map car seqs))
+            (accumulate-n op init (map cdr seqs)))))
