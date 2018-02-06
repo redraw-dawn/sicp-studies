@@ -937,3 +937,15 @@
 ;; Give a property that op should satisfy to guarantee that fold-right and
 ;; fold-left will produce the same values for any sequence.
 ;; Associativity (encountered in FP)
+
+;; Ex 2.39
+;; Complete the following lambdas of reverse (exercise 2.18) in terms of
+;; fold-right and fold-left from exercise 2.38:
+(define (reverse sequence)
+  (fold-right (lambda (x y) (append y (list x))) nil sequence))
+
+(define (append seq1 seq2)
+  (accumulate cons seq2 seq1))
+
+(define (reverse sequence)
+  (fold-left (lambda (y x) (cons x y)) nil sequence))
