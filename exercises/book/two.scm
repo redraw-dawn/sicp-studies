@@ -905,3 +905,36 @@
 (define (matrix-*-matrix m n)
   (let ((cols (transpose n)))
     (map (lambda (r) (matrix-*-vector cols r)) m)))
+
+;; Exercise 2.38
+(define (fold-left op initial sequence)
+  (define (iter result rest)
+    (if (null? rest)
+        result
+        (iter (op result (car rest))
+              (cdr rest))))
+  (iter initial sequence))
+
+(define (fold-right op initial sequence)
+  (accumulate op initial sequence))
+
+(define (accumulate op initial sequence)
+  (if (null? sequence)
+      initial
+      (op (car sequence)
+          (accumulate op initial (cdr sequence)))))
+
+;; what are values of following:
+(fold-right / 1 (list 1 2 3))
+;; => 3/2
+(fold-left / 1 (list 1 2 3))
+;; => 1/6
+(fold-right list nil (list 1 2 3))
+;; => (1 (2 (3 ())))
+(fold-left list nil (list 1 2 3))
+;; => (((() 1) 2) 3)
+
+;; Give a property that op should satisfy to guarantee that fold-right and
+;; fold-left will produce the same values for any sequence.
++
+;; Sort of like associativity for FP
