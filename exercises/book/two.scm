@@ -936,5 +936,4 @@
 
 ;; Give a property that op should satisfy to guarantee that fold-right and
 ;; fold-left will produce the same values for any sequence.
-+
-;; Sort of like associativity for FP
+;; Associativity (encountered in FP)
