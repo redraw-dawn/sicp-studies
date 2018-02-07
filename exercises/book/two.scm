@@ -949,3 +949,23 @@
 
 (define (reverse sequence)
   (fold-left (lambda (y x) (cons x y)) nil sequence))
+
+;; Ex 2.40
+;; 1. Define procedure unique-pairs
+;; 2. Use unique-pairs to simplify prime-sum-pairs from notes
+
+(define (unique-pairs n)
+  (accumulate append '()
+	      (map (lambda (i)
+		     (map (lambda (j)
+			    (list i j))
+			  (enumerate-interval 1 (- i 1))))
+		   (enumerate-interval 1 n))))
+
+(define (enumerate-interval x y)
+  (if (or (< x y) (= x  y))
+      (cons x (enumerate-interval (+ x 1) y))
+      '()))
+
+(define (prime-sum-pairs n)
+  (map make-pair-sum (filter prime-sum? (unique-pairs n))))

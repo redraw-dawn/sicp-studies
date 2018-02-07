@@ -201,3 +201,13 @@
 
 - This allows us to modify the representations of sequences whilst leaving programs
   in tact.
+
+#### Nested Mappings
+
+- Can be used for computations that are typically expressed with nested loops
+- Can also be used for permutations
+
+(define (flatmap proc seq)
+  (accumulate append nil (map proc seq)))
+
+- Section is primarily code snippets for the above use cases
