@@ -969,3 +969,43 @@
 
 (define (prime-sum-pairs n)
   (map make-pair-sum (filter prime-sum? (unique-pairs n))))
+
+;; Ex 2.41
+;; Write a procedure to find all ordered triples of distinct positive integers
+;; i, j, and k less than or equal to a given integer n that sum to a given
+;; integer s.
+
+;; Need to add an extra level of nesting from previous
+;; instead of filtering for prime sum, filter for (= sum s)
+
+(define (flatmap proc seq)
+  (accumulate append nil (map proc seq)))
+
+(define (make-triples limit)
+  (flatmap (lambda (k)
+	 (flatmap (lambda (i)
+		(map (lambda (j)
+		       (list k i j))
+		     (enumerate-interval 1 (- i 1))))
+	      	 (enumerate-interval 1 (- k 1))))
+       (enumerate-interval 1 limit)))
+
+(define (triple-sum-equals n triple)
+  (let ((sum (accumulate + 0 triple)))
+    (= n sum)))
+
+(define (triple-sum-equals n)
+  (lambda (triple)
+    (let ((sum (accumulate + 0 triple)))
+      (= n sum))))
+
+(define (filter f ls)
+  (cond
+   ((null? ls) '())
+   ((f (car ls))
+    (cons (car ls) (filter f (cdr ls))))
+   (else
+    (filter f (cdr ls)))))
+
+(define (triples-under-limit-that-sum-to-s limit s)
+  (filter (triple-sum-equals s) (make-triples limit)))
