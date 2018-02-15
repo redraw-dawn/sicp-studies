@@ -1009,3 +1009,26 @@
 
 (define (triples-under-limit-that-sum-to-s limit s)
   (filter (triple-sum-equals s) (make-triples limit)))
+
+;; Exercise 2.42
+;; implement: adjoin-position, empty-board & safe?
+(define (queens board-size)
+  (define (queen-cols k)
+    (if (= k 0)
+        (list empty-board) ;; return empty to finish function
+        (filter
+         (lambda (positions) (safe? k positions)) ;; filter (list col row) to see if queen is safe
+         (flatmap
+          (lambda (rest-of-queens) ;; recursion of (queens-cols k)
+            (map
+	     (lambda (new-row)
+	       (adjoin-position new-row k rest-of-queens)) ;; join position with of rest of positions. cons or append?
+	     (enumerate-interval 1 board-size))) ;; create list of int the length of the board
+          (queen-cols (- k 1))))))
+  (queen-cols board-size))
+
+;; How to represent position? (list col row). Can use (cadr position) to access row
+(define (adjoin-position row col rest-of-queens)
+  (cons (list col row) rest-of-queens)) ;; cons or append?
+(define empty-board '())
+(define (safe? positions)) ;; remember to only check that it's safe compared to queens in prev rows
