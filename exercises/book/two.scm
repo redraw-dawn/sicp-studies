@@ -1027,27 +1027,38 @@
           (queen-cols (- k 1))))))
   (queen-cols board-size))
 
-;; How to represent position? (list col row). Can use (cadr position) to access row
+;; How to represent position? (list col row)
 (define (adjoin-position row col rest-of-queens)
   (cons (list col row) rest-of-queens)) ;; cons or append?
 (define empty-board '())
-(define (safe? column positions)) ;; Boolean
+(define (safe? column positions))
 
 ;; remember to only check that it's safe compared to queens in prev rows
-(define (row-safe positions)
+(define (row-safe? positions)
   (define (duplicate-row row)
     (lambda (position)
       (= row (get-row position))))
   (define (checkrows remaining past)
     (cond
      ((null? remaining) #t)
-     ((exists (duplicate-row (get-row (car positions))) past) #f)
+     ((exists (duplicate-row (get-row (car remaining))) past) #f)
      (else
       (checkrows (cdr remaining) (cons (car remaining) past)))))
-  (checkrows positions '()));; Boolean
+  (checkrows positions '()))
 
-(define (col-safe positions));; Boolean
-(define (diagonal-safe positions));; Boolean
+(define (col-safe? positions)
+  (define (duplicate-col col)
+    (lambda (position)
+      (= col (get-col position))))
+  (define (checkrows remaining past)
+    (cond
+     ((null? remaining) #t)
+     ((exists (duplicate-col (get-col (car remaining))) past) #f)
+     (else
+      (checkrows (cdr remaining) (cons (car remaining) past)))))
+  (checkrows positions '()))
+
+(define (diagonal-safe? positions))
 
 (define (get-row position)
   (cadr position))
