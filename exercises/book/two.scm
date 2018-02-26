@@ -1034,29 +1034,24 @@
 (define (safe? column positions))
 
 ;; remember to only check that it's safe compared to queens in prev rows
-(define (row-safe? positions)
-  (define (duplicate-row row)
-    (lambda (position)
-      (= row (get-row position))))
-  (define (checkrows remaining past)
-    (cond
-     ((null? remaining) #t)
-     ((exists (duplicate-row (get-row (car remaining))) past) #f)
-     (else
-      (checkrows (cdr remaining) (cons (car remaining) past)))))
-  (checkrows positions '()))
+(define row-safe?
+  (is-safe? get-row))
 
-(define (col-safe? positions)
-  (define (duplicate-col col)
-    (lambda (position)
-      (= col (get-col position))))
-  (define (checkrows remaining past)
-    (cond
-     ((null? remaining) #t)
-     ((exists (duplicate-col (get-col (car remaining))) past) #f)
-     (else
-      (checkrows (cdr remaining) (cons (car remaining) past)))))
-  (checkrows positions '()))
+(define col-safe?
+  (is-safe? get-col))
+
+(define (is-safe? get-value)
+  (lambda (positions)
+    (define (duplicate value)
+      (lambda (position)
+	(= value (get-value position))))
+    (define (checkrows remaining past)
+      (cond
+       ((null? remaining) #t)
+       ((exists (duplicate (get-value (car remaining))) past) #f)
+       (else
+	(checkrows (cdr remaining) (cons (car remaining) past)))))
+    (checkrows positions '())))
 
 (define (diagonal-safe? positions))
 
