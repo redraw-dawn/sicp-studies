@@ -1031,4 +1031,33 @@
 (define (adjoin-position row col rest-of-queens)
   (cons (list col row) rest-of-queens)) ;; cons or append?
 (define empty-board '())
-(define (safe? positions)) ;; remember to only check that it's safe compared to queens in prev rows
+(define (safe? column positions)) ;; Boolean
+
+;; remember to only check that it's safe compared to queens in prev rows
+(define (row-safe positions)
+  (define (duplicate-row row)
+    (lambda (position)
+      (= row (get-row position))))
+  (define (checkrows remaining past)
+    (cond
+     ((null? remaining) #t)
+     ((exists (duplicate-row (get-row (car positions))) past) #f)
+     (else
+      (checkrows (cdr remaining) (cons (car remaining) past)))))
+  (checkrows positions '()));; Boolean
+
+(define (col-safe positions));; Boolean
+(define (diagonal-safe positions));; Boolean
+
+(define (get-row position)
+  (cadr position))
+
+(define (get-col position)
+  (car position))
+
+(define (exists predicate ls)
+  (cond
+   ((null? ls) #f)
+   ((predicate (car ls)) #t)
+   (else
+    (exists predicate (cdr ls)))))
