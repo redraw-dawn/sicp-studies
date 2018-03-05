@@ -1027,13 +1027,15 @@
           (queen-cols (- k 1))))))
   (queen-cols board-size))
 
-;; How to represent position? (list col row)
+;; Position represented as: (list col row)
 (define (adjoin-position row col rest-of-queens)
-  (cons (list col row) rest-of-queens)) ;; cons or append?
+  (cons (list col row) rest-of-queens))
 (define empty-board '())
-(define (safe? column positions))
+(define (safe? column positions)
+  (and (row-safe? positions)
+       (col-safe? positions)
+       (diagonal-safe? positions)))
 
-;; remember to only check that it's safe compared to queens in prev rows
 (define row-safe?
   (is-safe? get-row))
 
@@ -1053,7 +1055,21 @@
 	(checkrows (cdr remaining) (cons (car remaining) past)))))
     (checkrows positions '())))
 
-(define (diagonal-safe? positions))
+(define (diagonal-safe? positions)
+  (define (diagonal-check up low remaining)
+    (cond
+     ((null? remaining) #t)
+     ((or (= (get-row (car remaining)) up) (= (get-row (car remaining)) low)) #f)
+     (else
+      (diagonal-check (inc up) (dec low) (cdr remaining)))))
+  (if (null? positions)
+      #t
+      (diagonal-check (inc (get-row (car positions)))
+		      (dec (get-row (car positions)))
+		      (cdr positions))))
+
+(define (dec n) (- n 1))
+(define (inc n) (+ n 1))
 
 (define (get-row position)
   (cadr position))
