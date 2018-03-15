@@ -1083,3 +1083,18 @@
    ((predicate (car ls)) #t)
    (else
     (exists predicate (cdr ls)))))
+
+;; Exercise 2.43
+;; Explain why the following version of queens-cols is slower
+(flatmap
+ (lambda (new-row)
+   (map
+    (lambda (rest-of-queens)
+      (adjoin-position new-row k rest-of-queens))
+    (queen-cols (- k 1))))
+ (enumerate-interval 1 board-size))
+
+;; This version of queens-cols is slower because a new queens-cols procedure is
+;; evaluated for each enumeration rather than running through the enumeration
+;; within each queens-cols. This turns a linear recursive method into a tree
+;; recursive method
