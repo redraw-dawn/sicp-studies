@@ -1121,3 +1121,32 @@
 	painter
 	(let ((smaller (split painter (- n 1))))
 	  (fn painter (fn2 smaller smaller))))))
+
+;; Exercise 2.46
+;; Add data abstraction for vectors & some selectors. Then implement procedures
+;; add-vect, sub-vect and scale-vect
+(define (make-vect x y)
+  (cons x y))
+
+(define (xcor-vect vect)
+  (car vect))
+
+(define (ycor-vect vect)
+  (cdr vect))
+
+(define (modify-vect op)
+  (lambda (v1 v2)
+    (let ((x (op (xcor-vect v1) (xcor-vect v2)))
+	  (y (op (ycor-vect v1) (ycor-vect v2))))
+      (make-vect x y))))
+
+(define (add-vect v1 v2)
+  ((modify-vect +) v1 v2))
+
+(define (sub-vect v1 v2)
+  ((modify-vect -) v1 v2))
+
+(define (scale-vect scale vect)
+  (make-vect
+   (* scale (xcor-vect vect))
+   (* scale (ycor-vect vect))))
