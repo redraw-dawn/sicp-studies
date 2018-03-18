@@ -1112,3 +1112,12 @@
       painter
       (let ((smaller (up-split painter (- n 1))))
 	(below painter (beside smaller smaller)))))
+
+;; Exercise 2.45
+;; define splitting operation that covers right-split and up-split
+(define (split fn fn2)
+  (lambda (painter n)
+    (if (= n 0)
+	painter
+	(let ((smaller (split painter (- n 1))))
+	  (fn painter (fn2 smaller smaller))))))
