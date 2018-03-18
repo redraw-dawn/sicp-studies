@@ -1098,3 +1098,17 @@
 ;; evaluated for each enumeration rather than running through the enumeration
 ;; within each queens-cols. This turns a linear recursive method into a tree
 ;; recursive method
+
+;; Exercise 2.44
+;; Define up-split, like right-split but switches roles of below and beside
+(define (right-split painter n)
+  (if (= n 0)
+      painter
+      (let ((smaller (right-split painter (- n 1))))
+        (beside painter (below smaller smaller)))))
+
+(define (upsplit painter n)
+  (if (= n 0)
+      painter
+      (let ((smaller (up-split painter (- n 1))))
+	(below painter (beside smaller smaller)))))
