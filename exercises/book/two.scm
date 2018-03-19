@@ -1150,3 +1150,40 @@
   (make-vect
    (* scale (xcor-vect vect))
    (* scale (ycor-vect vect))))
+
+;; Exercise 2.47
+;; make selectors for frame constructors
+(define (make-frame origin edge1 edge2)
+  (list origin edge1 edge2))
+
+(define (origin-frame frame)
+  (car frame))
+
+(define (edge1-frame frame)
+  (cadr frame))
+
+(define (edge2-frame frame)
+  (caddr frame))
+
+(define (make-frame origin edge1 edge2)
+  (cons origin (cons edge1 edge2)))
+
+(define (origin-frame frame)
+  (car frame))
+
+(define (edge1-frame frame)
+  (cadr fp))
+
+(define (edge2-frame frame)
+  (cddr fp))
+
+;; Exercise 2.48
+;; Make constructor for segment and selectors for start and end
+(define (make-segment vect1 vect2)
+  (cons vect1 vect2))
+
+(define (start-segment segment)
+  (car segment))
+
+(define (end-segment segment)
+  (cdr segment))
