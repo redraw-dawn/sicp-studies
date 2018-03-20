@@ -1237,3 +1237,32 @@
   (segments->painter diamond-segments))
 ;; d) the wave painter
 ;; nup
+
+;; Ex2.50 define flip-horiz, rotate-by-180 & rotate-by-270
+(define (transform-painter painter origin corner1 corner2)
+  (lambda (frame)
+    (let ((m (frame-coord-map frame)))
+      (let ((new-origin (m origin)))
+        (painter
+         (make-frame new-origin
+                     (sub-vect (m corner1) new-origin)
+                     (sub-vect (m corner2) new-origin)))))))
+
+(define (flip-horiz painter)
+  (transform-painter painter
+		     (make-vect 1 0)
+		     (make-vect 0 0)
+		     (make-vect 1 1)))
+
+;; same as flip-vert in book?
+(define (rotate-180 painter)
+  (transform-painter painter
+		     (make-vect 1 1)
+		     (make-vect 0 1)
+		     (make-vect 1 0)))
+
+(define (rotate-270 painter)
+  (transform-painter painter
+		     (make-vect 1 0)
+		     (make-vect 0 0)
+		     (make-vect 1 1)))
