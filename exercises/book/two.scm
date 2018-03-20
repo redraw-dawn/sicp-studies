@@ -1230,10 +1230,10 @@
 (define diamond
   (define diamond-segments
     (list
-     (make-segment (make-vect 0 1) (make-vect 1 2))
-     (make-segment (make-vect 1 2) (make-vect 2 1))
-     (make-segment (make-vect 2 1) (make-vect 1 0))
-     (make-segment (make-vect 1 0) (make-vect 0 1))))
+     (make-segment (make-vect 0 0.5) (make-vect 0.5 1))
+     (make-segment (make-vect 0.5 1) (make-vect 1 0.5))
+     (make-segment (make-vect 1 0.5) (make-vect 0.5 0))
+     (make-segment (make-vect 0.5 0) (make-vect 0 0.5))))
   (segments->painter diamond-segments))
 ;; d) the wave painter
 ;; nup
