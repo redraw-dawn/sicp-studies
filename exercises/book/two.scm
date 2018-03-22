@@ -1310,3 +1310,26 @@
 
 (define (below painter1 painter2)
   (rotate90 (beside (rotate-270 painter1) (rotate-270 painter2))))
+
+
+;; Ex 2.52
+;; a) Low level
+;; Change at lowest level is changing segments/coords
+
+;; b) Mid level
+(define (corner-split painter n)
+  (if (= n 0)
+      painter
+      (let ((up (up-split painter (- n 1)))
+            (right (right-split painter (- n 1))))
+        (let ((top-left up)
+              (bottom-right right)
+              (corner (corner-split painter (- n 1))))
+          (beside (below painter top-left)
+                  (below bottom-right corner))))))
+
+;; c) High level
+(define (square-limit painter n)
+  (let ((combine4 (square-of-four flip-horiz identity
+                                  flip-horiz identity)))
+    (combine4 (corner-split painter n))))

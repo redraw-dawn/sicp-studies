@@ -211,3 +211,12 @@
   (accumulate append nil (map proc seq)))
 
 - Section is primarily code snippets for the above use cases
+
+#### Case Study: A Picture Language
+
+- Stratified design -> a complex system is described as a sequence of levels that
+  are described using a sequence of languages.
+  Each level is constructed by constructing parts that are regarded as primitive
+  at that level and are used as primitives in the next level.
+  The language used at each level has primitives, means of combination and
+  abstraction appropriate to that level of detail.
