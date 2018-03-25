@@ -1351,3 +1351,17 @@
 ;; => #f
 (memq 'red '(red shoes blue socks))
 ;; => (red shoes blue socks)
+
+;; Ex 2.54
+;; Define equal. if list, they must contain same elements in same order. Otherwise
+;; use eq? for symbol equality.
+(define (equal? a b)
+  (cond
+   ((and (null? a) (null? b))
+    #t)
+   ((and (pair? a) (pair? b))
+    (if (eq? (car a) (car b))
+	(equal (cdr a) (cdr b))
+	#f))
+   (else
+    (eq? a b))))
