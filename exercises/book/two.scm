@@ -1365,3 +1365,7 @@
    ((or (null? a) (null? b)) #f)
    ((or (pair? a) (pair? b)) #f)
    (else (eq? a b))))
+
+;; Ex 2.55
+;; quote is returned as 'x is shorthand for (quote x) so the expression evaluates
+;; to (quote (quote abracadabra))
