@@ -1357,11 +1357,11 @@
 ;; use eq? for symbol equality.
 (define (equal? a b)
   (cond
-   ((and (null? a) (null? b))
-    #t)
+   ((and (null? a) (null? b)) #t)
    ((and (pair? a) (pair? b))
     (if (eq? (car a) (car b))
-	(equal (cdr a) (cdr b))
+	(equal? (cdr a) (cdr b))
 	#f))
-   (else
-    (eq? a b))))
+   ((or (null? a) (null? b)) #f)
+   ((or (pair? a) (pair? b)) #f)
+   (else (eq? a b))))
