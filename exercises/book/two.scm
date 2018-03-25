@@ -1333,3 +1333,21 @@
   (let ((combine4 (square-of-four flip-horiz identity
                                   flip-horiz identity)))
     (combine4 (corner-split painter n))))
+
+;; Ex 2.53
+;; What would interpreter print for the following:
+
+(list 'a 'b 'c)
+;; => (a b c)
+(list (list 'george))
+;; => ((george))
+(cdr '((x1 x2) (y1 y2)))
+;; => ((y1 y2))
+(cadr '((x1 x2) (y1 y2)))
+;; => (y1 y2)
+(pair? (car '(a short list)))
+;; => #f
+(memq 'red '((red shoes) (blue socks)))
+;; => #f
+(memq 'red '(red shoes blue socks))
+;; => (red shoes blue socks)
