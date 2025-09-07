@@ -64,13 +64,15 @@ one-point-two
 (define (a-plus-abs-b a b)
   ((if (> b 0) + -) a b))
 
-
 (+ 4 8)
 
 (define (sqrt-iter guess x)
   (if (good-enough? guess x)
       guess
       (sqrt-iter (improve guess x) x)))
+
+;; (define (sqrt-iter-2 guess x)
+;;   (gen-iter guess x improve good-enough? 0))
 
 (define (improve guess x)
   (average guess (/ x guess)))
@@ -83,3 +85,51 @@ one-point-two
 
 (define (sqrt x)
   (sqrt-iter 1.0 x))
+
+(define (sqrt-2 x)
+  (sqrt-iter-2 1.0 x))
+
+;; 1.6
+(define (new-if predicate then-clause else-clause)
+  (cond (predicate then-clause)
+        (else else-clause)))
+
+;; doesn't have delayed evaluation from special-clause, if
+;; therefore the else-clause always gets evaluated resulting
+;; in never-ending calls to sqrt-iter ^
+
+;; 1.7
+(define (new-good-enough? guess last x)
+  (< (abs (- (square guess) last)) (* 0.01 x)))
+
+;; 1.8
+(define (cube-root x)
+  (cube-root-iter 1.0 x))
+
+(define (cube-root-iter guess x)
+  (gen-iter (improve-cube x guess) guess x improve-cube good-enough-cube?))
+
+(define (gen-iter guess last-guess x root-fn good-enough-fn)
+  (display guess)
+  (newline)
+  (if (good-enough-fn guess last-guess x)
+      guess
+      (gen-iter (root-fn x guess) guess x root-fn good-enough-fn)))
+
+(define (display-n n)
+  (display n)
+  (newline)
+  n)
+
+(define (improve-cube x y)
+  (/
+   (+ (/ x (* y y))
+      (* 2 y))
+   3.0))
+
+(define (good-enough-cube? guess last-guess x)
+  ;; (< (abs (- (cube guess) x)) 0.01))
+  (< (abs (- guess last-guess)) (* 0.001 x)))
+
+(define (cube x)
+  (* x x x))
