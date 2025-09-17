@@ -40,11 +40,11 @@
             )
          )
       )
-     (* 3
-        (- 6 2)
-        (- 2 7)
-        )
-     )
+   (* 3
+      (- 6 2)
+      (- 2 7)
+      )
+   )
   )
 
 
@@ -129,7 +129,35 @@ one-point-two
 
 (define (good-enough-cube? guess last-guess x)
   ;; (< (abs (- (cube guess) x)) 0.01))
-  (< (abs (- guess last-guess)) (* 0.001 x)))
+  (< (abs (- guess last-guess)) (* 0.0001 x)))
 
 (define (cube x)
   (* x x x))
+
+(define (improved-sqrt x)
+  (define (good-enough? guess)
+    (< (abs (- (square guess) x)) 0.001))
+
+  (define (improve guess)
+    (average guess (/ x guess)))
+
+  (define (sqrt-iter guess)
+    (if (good-enough? guess)
+        guess
+        (sqrt-iter (improve guess))))
+
+  (sqrt-iter 1.0))
+
+(define (factorial-rec n)
+  (if (= n 1)
+      1
+      (* n (factorial-rec (- n 1)))))
+
+(define (factorial-tail-rec n)
+  (define (factorial-iter product counter)
+    (if (> n counter)        product
+        (factorial-iter
+         (* product counter)
+         (+ 1 counter))))
+
+  (factorial-iter 1 1))
