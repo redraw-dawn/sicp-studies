@@ -161,3 +161,37 @@ one-point-two
          (+ 1 counter))))
 
   (factorial-iter 1 1))
+
+;; Ackermann's function
+(define (A x y)
+  (cond ((= y 0) 0)
+        ((= x 0) (* 2 y))
+        ((= y 1) 2)
+        (else (A (- x 1) (A x (- y 1))))))
+
+;; n -> 2n
+(define (f n) (A 0 n))
+
+;; n -> n^3
+(define (g n) (A 1 n))
+
+;; n ->
+(define (h n) (A 2 n))
+
+;; n -> 5n^2
+(define (k n) (* 5 n n))
+
+
+(define (fib n)
+  (cond ((= n 0) 0)
+        ((= n 1) 1)
+        (else (+ (fib (- n 1))
+                 (fib (- n 2))))))
+
+(define (fib-tail-rec n)
+  (define (fib-iter a b count)
+    (if (= count 0)
+        b
+        (fib-iter (+ a b) a (- count 1))))
+
+  (fib-iter 1 0 n))
